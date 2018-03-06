@@ -2,6 +2,7 @@
 *.class
 
 .idea/workspace.xml
+.idea/tasks.xml
 
 # Log file
 *.log

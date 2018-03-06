@@ -7,14 +7,14 @@
 <?import javafx.scene.web.WebView?>
 
 <?import javafx.scene.image.Image?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.HomePageController">
    <children>
        <AnchorPane prefHeight="80.0" prefWidth="250" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
            <children>
                <fx:define>
-                   <Image fx:id="imgLeftArrow" url="/Drawable/left-arrow.png" />
-                   <Image fx:id="imgRightArrow" url="/Drawable/right-arrow.png" />
-                   <Image fx:id="imgRefresh" url="/Drawable/icons8-refresh-25.png"/>
+                   <Image fx:id="imgLeftArrow" url="@../Drawable/left-arrow.png" />
+                   <Image fx:id="imgRightArrow" url="@../Drawable/right-arrow.png" />
+                   <Image fx:id="imgRefresh" url="@../Drawable/icons8-refresh-25.png"/>
                </fx:define>
                <TextField fx:id="addressBar" layoutX="100.0" layoutY="14.0" onAction="#loadPage" prefHeight="31.0" prefWidth="454.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="5.0" />
                <JFXButton fx:id="goBackButton" layoutX="4.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.topAnchor="3">
