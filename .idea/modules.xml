@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/clover.iml" filepath="$PROJECT_DIR$/.idea/modules/clover.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/clover_main.iml" filepath="$PROJECT_DIR$/.idea/modules/clover_main.iml" group="clover" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clover_test.iml" filepath="$PROJECT_DIR$/.idea/modules/clover_test.iml" group="clover" />
     </modules>
   </component>
 </project>
