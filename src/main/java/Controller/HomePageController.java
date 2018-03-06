@@ -52,7 +52,6 @@ public class HomePageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         webEngine = webView.getEngine();
 
-
 //        addressBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
 //            public void handle(KeyEvent event) {
