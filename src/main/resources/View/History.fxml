@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.HistoryController">
+    <children>
+        <AnchorPane prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #3367D6" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+            <children>
+                <Label style="-fx-text-fill: white; -fx-font-size: 20" text="History" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="12" />
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                    <JFXTextField promptText="Search history" style="-fx-text-fill: white; -fx-font-size: 20; -fx-prompt-text-fill: white" />
+                </HBox>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
