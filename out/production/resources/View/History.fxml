@@ -11,7 +11,7 @@
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 20" text="History" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="12" />
                 <HBox alignment="CENTER" prefHeight="60.0" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-                    <JFXTextField labelFloat="true" promptText="Search history" style="-fx-text-fill: white; -fx-font-size: 20; -fx-prompt-text-fill: white" />
+                    <JFXTextField promptText="Search history" style="-fx-text-fill: white; -fx-font-size: 20; -fx-prompt-text-fill: white" />
                 </HBox>
             </children>
         </AnchorPane>
