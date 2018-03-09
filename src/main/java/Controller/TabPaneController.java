@@ -45,6 +45,7 @@ public class TabPaneController implements Initializable{
             //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
             //it will prevent your tabcontent.fxml to fill the entire tab
             tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
+            //tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
 
             //
             tab.setText("Google.com");

@@ -11,6 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/View/tabpane.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("/View/History.fxml"));
         primaryStage.setTitle("Web Browser");
         primaryStage.setScene(new Scene(root, 1200, 600));
         //primaryStage.setMaximized(true);

@@ -12,7 +12,7 @@
        <AnchorPane prefHeight="49.0" prefWidth="1000.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
            <children>
                <TextField fx:id="addressBar" layoutX="100.0" layoutY="14.0" onAction="#loadPage" prefHeight="31.0" prefWidth="454.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="5.0" />
-               <JFXButton fx:id="goBackButton" layoutX="4.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="3">
+               <JFXButton fx:id="goBackButton" text="" layoutX="4.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="3">
                    <graphic>
                        <ImageView>
                      <image>
@@ -20,7 +20,7 @@
                      </image></ImageView>
                    </graphic>
                </JFXButton>
-               <JFXButton fx:id="goForwardButton" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="3">
+               <JFXButton fx:id="goForwardButton" text="" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="3">
                    <graphic>
                        <ImageView>
                      <image>
@@ -28,7 +28,7 @@
                      </image></ImageView>
                    </graphic>
                </JFXButton>
-               <JFXButton fx:id="refreshButton" layoutX="104.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="3.0">
+               <JFXButton fx:id="refreshButton" text="" layoutX="104.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="3.0">
                    <graphic>
                        <ImageView>
                      <image>

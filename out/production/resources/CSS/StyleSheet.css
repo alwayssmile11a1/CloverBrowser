@@ -28,3 +28,23 @@
     /*-fx-graphic: url('http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/128/Pizza-icon.png');*/
 }
 
+.jfx-list-cell:selected{
+    -fx-background-color: #3d8c91;
+}
+
+.jfx-list-cell:hover{
+    -fx-background-color: #1bd79c;
+}
+
+
+
+.jfx-list-cell{
+    -fx-background-insets: 0.0;
+}
+
+.jfx-list-view{
+    -fx-background-insets: 0.0;
+    -fx-cell-vertical-margin: 10;
+    -fx-vertical-gap: 10;
+
+}
