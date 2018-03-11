@@ -8,7 +8,7 @@
    <children>
       <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <tabs>
-            <Tab closable="false" text="+" />
+            <Tab fx:id="addNewTabButton" closable="false" text="+" />
          </tabs>
       </TabPane>
    </children>

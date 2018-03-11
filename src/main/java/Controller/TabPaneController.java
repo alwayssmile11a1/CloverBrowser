@@ -1,10 +1,16 @@
 package Controller;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -15,27 +21,30 @@ public class TabPaneController implements Initializable{
 
     public static final String FXMLPATH = "/View/tabpane.fxml";
 
-    @FXML
-    private AnchorPane anchorPane;
 
     @FXML
     private TabPane tabPane;
 
 
-    //FXMLLoader fxmlLoader;
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //fxmlLoader = new FXMLLoader(getClass().getResource(TabContentController.FXMLPATH));
-
         addNewTab();
 
+        //
+        tabPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(tabPane.getSelectionModel().isSelected(tabPane.getTabs().size()-1))
+                {
+                    onAddNewTabButtonClicked();
+                }
+            }
+        });
     }
 
     //add a new tab
-    private void addNewTab()
+    private Tab addNewTab()
     {
         try {
             //Create a new tab
@@ -45,18 +54,34 @@ public class TabPaneController implements Initializable{
             //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
             //it will prevent your tabcontent.fxml to fill the entire tab
             tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
-            //tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
-
-            //
-            tab.setText("Google.com");
 
             tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
             tabPane.getSelectionModel().select(tab);
 
+            //Google.com by default
+            tab.setText("Google.com");
+
+            return tab;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return null;
+    }
+
+
+    private void onAddNewTabButtonClicked()
+    {
+        addNewTab();
+    }
+
+
+    public void onMouseDrag()
+    {
+
+
+
     }
 
 
