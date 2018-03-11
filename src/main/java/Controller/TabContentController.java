@@ -1,5 +1,8 @@
 package Controller;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXPopup;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -8,13 +11,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 
+import java.awt.print.Book;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,6 +31,7 @@ public class TabContentController implements Initializable {
 
     //manage web pages
     private WebEngine webEngine;
+    private JFXPopup popup;
 
     //FXML variables
     @FXML
@@ -41,6 +49,9 @@ public class TabContentController implements Initializable {
     @FXML
     private Button refreshButton;
 
+    @FXML
+    private Button menuButton;
+
     private String httpHeader = "https://www.";
 
 
@@ -52,14 +63,10 @@ public class TabContentController implements Initializable {
         webEngine.load(httpHeader+ "google.com");
 
         //region go back and go forward and refresh
-        // there something i need to test in this region
         goBackButton.setOnMouseClicked(this::OnBackButtonClicked);
         goForwardButton.setOnMouseClicked(this::OnForwardButtonClicked);
         refreshButton.setOnMouseClicked(e->{
             webEngine.reload();
-            ObservableList<WebHistory.Entry> entries = webEngine.getHistory().getEntries();
-
-            int a = 2;
         });
         //endregion
         addressBar.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -76,12 +83,37 @@ public class TabContentController implements Initializable {
                 });
             }
         });
+
+
+
+        popup = new JFXPopup(menuButton);
+        JFXButton History = new JFXButton("History");
+        JFXButton Bookmarks = new JFXButton("Bookmarks");
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(History, Bookmarks);
+        popup.setPopupContent(vBox);
+        menuButton.setOnMouseClicked(this::OnMenuButtonClicked);
     }
 
     public void loadPage()
     {
         addressBar.setFocusTraversable(false);
         webEngine.load(httpHeader+ addressBar.getText());
+        addToHistory();
+
+    }
+
+    private void addToHistory(){
+        ObservableList<WebHistory.Entry> entries = webEngine.getHistory().getEntries();
+        int i = entries.size()-1;
+        String url = entries.get(i).getUrl();
+        String title = entries.get(i).getTitle();
+        String [] temp = entries.get(i).getLastVisitedDate().toString().split(" ");
+        String date = temp[2] + " " + temp[1] + " " + temp[5];
+        String time = temp[3];
+
+
+        HistoryController.tbvHistory.getRoot().getChildren().add(new TreeItem<>(new HistoryView(date, url, time, "a", title)));
     }
 
     private void OnBackButtonClicked(MouseEvent e){
@@ -94,6 +126,11 @@ public class TabContentController implements Initializable {
         Platform.runLater(() -> {
             webEngine.executeScript("history.forward()");
         });
+    }
+
+    private void OnMenuButtonClicked(MouseEvent e){
+        int a;
+        popup.show(menuButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.LEFT);
     }
 
 }

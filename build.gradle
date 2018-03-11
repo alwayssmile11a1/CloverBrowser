@@ -13,4 +13,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'com.jfoenix:jfoenix:8.0.1'
     compile 'com.pdfcrowd:pdfcrowd:4.3.0'
+    compile 'org.jsoup:jsoup:1.11.2'
 }

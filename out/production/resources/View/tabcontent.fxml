@@ -6,12 +6,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.web.WebView?>
+<?import com.jfoenix.skins.JFXPopupSkin?>
 
 <AnchorPane fx:id="tabpage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TabContentController">
    <children>
        <AnchorPane prefHeight="49.0" prefWidth="1000.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
            <children>
-               <TextField fx:id="addressBar" layoutX="100.0" layoutY="14.0" onAction="#loadPage" prefHeight="31.0" prefWidth="454.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="5.0" />
+               <TextField fx:id="addressBar" layoutX="100.0" layoutY="14.0" onAction="#loadPage" prefHeight="31.0" prefWidth="454.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="5.0" />
                <JFXButton fx:id="goBackButton" text="" layoutX="4.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="3">
                    <graphic>
                        <ImageView>
@@ -37,11 +38,20 @@
                   </ImageView>
                    </graphic>
                </JFXButton>
+               <JFXButton fx:id="menuButton" text="" layoutX="104.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
+                   <graphic>
+                       <ImageView>
+                           <image>
+                               <Image url="@../Drawable/icons8-menu-vertical-25.png" />
+                           </image>
+                       </ImageView>
+                   </graphic>
+               </JFXButton>
            </children>
        </AnchorPane>
        <!--<MyTitleBar prefHeight="50.0" prefWidth="1013.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>-->
 
-      <WebView fx:id="webView" layoutX="144.0" layoutY="48.0" prefHeight="551.0" prefWidth="998.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="48.0" />
+       <WebView fx:id="webView" layoutX="144.0" layoutY="48.0" prefHeight="551.0" prefWidth="998.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="48.0" />
 
 
 

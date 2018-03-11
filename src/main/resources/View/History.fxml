@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<?import com.jfoenix.controls.JFXListView?>
-<?import com.jfoenix.controls.JFXButton?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.HistoryController">
     <children>
         <AnchorPane prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
@@ -17,9 +16,17 @@
                 </HBox>
             </children>
         </AnchorPane>
-        <AnchorPane style="-fx-background-color: #535A60" layoutY="60.0" prefHeight="340.0" prefWidth="600.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="60">
-            <JFXListView fx:id="lsvHistory" stylesheets="@../CSS/StyleSheet.css" prefHeight="340.0" prefWidth="200.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="50" />
-            <JFXButton fx:id="btnExpand" text="Expand" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css"/>
+        <AnchorPane layoutY="60.0" prefHeight="340.0" prefWidth="600.0" style="-fx-background-color: #535A60" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="60">
+            <!--<TableView layoutX="295.0" prefHeight="290.0" prefWidth="306.0" stylesheets="@../CSS/StyleSheet.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="295.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+                <columns>
+                    <TableColumn text="" />
+                    <TableColumn text="Date" />
+                    <TableColumn text="Domain" />
+                    <TableColumn text="" />
+                    <TableColumn text="" />
+                </columns>
+            </TableView>-->
+            <JFXTreeTableView fx:id="tbvHistory" prefHeight="326.0" prefWidth="600.0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0"/>
         </AnchorPane>
     </children>
 </AnchorPane>
