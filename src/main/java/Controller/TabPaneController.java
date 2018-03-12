@@ -44,7 +44,7 @@ public class TabPaneController implements Initializable{
     }
 
     //add a new tab
-    private Tab addNewTab()
+    public Tab addNewTab()
     {
         try {
             //Create a new tab
@@ -76,17 +76,7 @@ public class TabPaneController implements Initializable{
         addNewTab();
     }
 
-
-    public void onMouseDrag()
-    {
-
-
-
+    public TabPane getTabPane() {
+        return tabPane;
     }
-
-
-
-
-
-
 }

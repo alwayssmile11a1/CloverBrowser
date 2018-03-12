@@ -9,19 +9,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 
 import java.awt.print.Book;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,7 +35,7 @@ public class TabContentController implements Initializable {
 
     //FXML variables
     @FXML
-    private  WebView webView;
+    private WebView webView;
 
     @FXML
     private TextField addressBar;
@@ -60,12 +60,12 @@ public class TabContentController implements Initializable {
         webEngine = webView.getEngine();
 
         //load google.com by default
-        webEngine.load(httpHeader+ "google.com");
+        webEngine.load(httpHeader + "google.com");
 
         //region go back and go forward and refresh
         goBackButton.setOnMouseClicked(this::OnBackButtonClicked);
         goForwardButton.setOnMouseClicked(this::OnForwardButtonClicked);
-        refreshButton.setOnMouseClicked(e->{
+        refreshButton.setOnMouseClicked(e -> {
             webEngine.reload();
         });
         //endregion
@@ -85,9 +85,14 @@ public class TabContentController implements Initializable {
         });
 
 
-
         popup = new JFXPopup(menuButton);
         JFXButton History = new JFXButton("History");
+        History.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                onHistoryButtonClicked();
+            }
+        });
         JFXButton Bookmarks = new JFXButton("Bookmarks");
         VBox vBox = new VBox();
         vBox.getChildren().addAll(History, Bookmarks);
@@ -95,20 +100,19 @@ public class TabContentController implements Initializable {
         menuButton.setOnMouseClicked(this::OnMenuButtonClicked);
     }
 
-    public void loadPage()
-    {
+    public void loadPage() {
         addressBar.setFocusTraversable(false);
-        webEngine.load(httpHeader+ addressBar.getText());
+        webEngine.load(httpHeader + addressBar.getText());
         addToHistory();
 
     }
 
-    private void addToHistory(){
+    private void addToHistory() {
         ObservableList<WebHistory.Entry> entries = webEngine.getHistory().getEntries();
-        int i = entries.size()-1;
+        int i = entries.size() - 1;
         String url = entries.get(i).getUrl();
         String title = entries.get(i).getTitle();
-        String [] temp = entries.get(i).getLastVisitedDate().toString().split(" ");
+        String[] temp = entries.get(i).getLastVisitedDate().toString().split(" ");
         String date = temp[2] + " " + temp[1] + " " + temp[5];
         String time = temp[3];
 
@@ -116,21 +120,48 @@ public class TabContentController implements Initializable {
         HistoryController.tbvHistory.getRoot().getChildren().add(new TreeItem<>(new HistoryView(date, url, time, "a", title)));
     }
 
-    private void OnBackButtonClicked(MouseEvent e){
+    private void OnBackButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
             webEngine.executeScript("history.back()");
         });
     }
 
-    private void OnForwardButtonClicked(MouseEvent e){
+    private void OnForwardButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
             webEngine.executeScript("history.forward()");
         });
     }
 
-    private void OnMenuButtonClicked(MouseEvent e){
+    private void OnMenuButtonClicked(MouseEvent e) {
         int a;
         popup.show(menuButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.LEFT);
+    }
+
+    private void onHistoryButtonClicked() {
+        openHistoryTab();
+    }
+
+    private void openHistoryTab() {
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource((TabPaneController.FXMLPATH)));
+            AnchorPane frame = fxmlLoader.load();
+            TabPaneController tabPaneController = (TabPaneController) fxmlLoader.getController();
+            TabPane tabPane = tabPaneController.getTabPane();
+
+            //Create a new tab
+            Tab tab = new Tab();
+            tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
+
+            tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
+            tabPane.getSelectionModel().select(tab);
+
+            tab.setText("History");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
