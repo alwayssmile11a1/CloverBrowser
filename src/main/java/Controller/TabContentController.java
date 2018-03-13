@@ -1,5 +1,7 @@
 package Controller;
 
+import Application.Main;
+import Model.HTMLtoPDF;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
@@ -17,11 +19,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
 import javafx.stage.PopupWindow;
 
+import javax.swing.text.html.HTML;
 import java.awt.print.Book;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,7 +56,7 @@ public class TabContentController implements Initializable {
     private Button refreshButton;
 
     @FXML
-    private Button menuButton;
+    private Button toPDFButton;
 
     private String httpHeader = "https://www.";
 
@@ -60,6 +66,13 @@ public class TabContentController implements Initializable {
 
         //load google.com by default
         webEngine.load(httpHeader + "google.com");
+
+        webEngine.setOnStatusChanged(new EventHandler<WebEvent<String>>() {
+            @Override
+            public void handle(WebEvent<String> event) {
+                addressBar.setText(webEngine.getLocation().toString());
+            }
+        });
 
         //region go back and go forward and refresh
         goBackButton.setOnMouseClicked(this::OnBackButtonClicked);
@@ -76,18 +89,15 @@ public class TabContentController implements Initializable {
                     public void run() {
                         if (addressBar.isFocused() && !addressBar.getText().isEmpty()) {
                             addressBar.selectAll();
-                            System.out.println("asasdasd");
+
                         }
                     }
                 });
             }
         });
-    }
 
-    public void loadPage() {
-        addressBar.setFocusTraversable(false);
-        webEngine.load(httpHeader + addressBar.getText());
-        //addToHistory();
+
+        toPDFButton.setOnMouseClicked(event -> convertToPDF());
 
     }
 
@@ -119,30 +129,27 @@ public class TabContentController implements Initializable {
     }
 
 
+    public void loadPage() {
+        addressBar.setFocusTraversable(false);
+        webEngine.load(httpHeader + addressBar.getText());
 
-
-
-    private void openHistoryTab() {
-
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource((TabPaneController.FXMLPATH)));
-            AnchorPane frame = fxmlLoader.load();
-            TabPaneController tabPaneController = (TabPaneController) fxmlLoader.getController();
-            TabPane tabPane = tabPaneController.getTabPane();
-
-            //Create a new tab
-            Tab tab = new Tab();
-            tab.setContent(FXMLLoader.load(getClass().getResource("/View/History.fxml")));
-
-            tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
-            tabPane.getSelectionModel().select(tab);
-
-            tab.setText("History");
-            int a = 2;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
+
+    private void convertToPDF()
+    {
+        FileChooser fileChooser = new FileChooser();
+
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF File (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show save file dialog
+        // The stage for show dialouge is get from MainClass stage
+        File file = fileChooser.showSaveDialog(Main.getStage());
+
+        HTMLtoPDF.execute(webEngine.getLocation().toString(),file);
+
+    }
+
 
 }

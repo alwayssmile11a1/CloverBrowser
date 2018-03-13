@@ -1,5 +1,7 @@
 package Controller;
 
+import Application.Main;
+import Model.HTMLtoPDF;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
 import javafx.event.Event;
@@ -16,7 +18,9 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -51,15 +55,21 @@ public class TabPaneController implements Initializable{
         });
 
         popup = new JFXPopup(menuButton);
+
         JFXButton History = new JFXButton("History");
         History.setOnMouseClicked(e->{
             addNewTab(true);
         });
+
         JFXButton Bookmarks = new JFXButton("Bookmarks");
+
+        JFXButton toPDFButton = new JFXButton("");
+
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(History, Bookmarks);
+        vBox.getChildren().addAll(History, Bookmarks, toPDFButton);
         popup.setPopupContent(vBox);
         menuButton.setOnMouseClicked(this::OnMenuButtonClicked);
+
     }
 
     //add a new tab
@@ -112,4 +122,7 @@ public class TabPaneController implements Initializable{
         double a = menuButton.getScene().getWidth();
         popup.show(menuButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, e.getX(), e.getY());
     }
+
+
+
 }
