@@ -4,7 +4,7 @@
     -fx-primary: #2A2E37;
     -fx-secondary: #FFFF8D;
     -fx-primarytext: #B2B2B2;
-    -fx-priText: #111111;
+    -fx-main: #535A60;
     /*we can see preview color in right hand side*/
 }
 
@@ -49,13 +49,49 @@
 
 }
 
-.jfx-tab-pane .headers-region {
-    -fx-background-color: #1b75bc;
+
+.tab{
+    -fx-background-color: -fx-main;
+    -fx-pref-width: 150;
+    -fx-pref-height: 40;
 }
-.jfx-tab-pane .tab-header-background {
-    -fx-background-color: #1b75bc;
+.tab-label{
+    -fx-text-fill: white;
 }
-.jfx-tab-pane .tab-selected-line {
-    -fx-stroke: #75bc1b;
-    -fx-stroke-width: 3pt;
+
+.tab:selected{
+    -fx-border-color: -fx-secondary;
+    -fx-border-width: 4 0 0 0
+}
+
+.tab:hover {
+    -fx-background-color: -fx-secondary;
+}
+.tab:hover .tab-label{
+    -fx-text-fill: -fx-main;
+}
+
+.tab-header-background  {
+    -fx-background-color: -fx-main;
+}
+
+.tab-plus{
+    -fx-pref-width: 27;
+}
+
+/*==========================*/
+/*
+.tab:focused{
+    -fx-focus-color: transparent;
+}
+.tab-pane .tab-header-background{
+    -fx-background-color: transparent;
+}
+.tab-pane .tab-header-area{
+    -fx-background-insets: 0, 0 0 10;
+    -fx-padding: 0.0em 0.0em 0.0em 0.0em;
+}*/
+.tab:selected .focus-indicator{
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
 }
