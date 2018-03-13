@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
+import javafx.stage.PopupWindow;
 
 import java.awt.print.Book;
 import java.io.IOException;
@@ -31,7 +32,6 @@ public class TabContentController implements Initializable {
 
     //manage web pages
     private WebEngine webEngine;
-    private JFXPopup popup;
 
     //FXML variables
     @FXML
@@ -53,7 +53,6 @@ public class TabContentController implements Initializable {
     private Button menuButton;
 
     private String httpHeader = "https://www.";
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -83,27 +82,12 @@ public class TabContentController implements Initializable {
                 });
             }
         });
-
-
-        popup = new JFXPopup(menuButton);
-        JFXButton History = new JFXButton("History");
-        History.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                onHistoryButtonClicked();
-            }
-        });
-        JFXButton Bookmarks = new JFXButton("Bookmarks");
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(History, Bookmarks);
-        popup.setPopupContent(vBox);
-        menuButton.setOnMouseClicked(this::OnMenuButtonClicked);
     }
 
     public void loadPage() {
         addressBar.setFocusTraversable(false);
         webEngine.load(httpHeader + addressBar.getText());
-        addToHistory();
+        //addToHistory();
 
     }
 
@@ -116,8 +100,10 @@ public class TabContentController implements Initializable {
         String date = temp[2] + " " + temp[1] + " " + temp[5];
         String time = temp[3];
 
-
-        HistoryController.tbvHistory.getRoot().getChildren().add(new TreeItem<>(new HistoryView(date, url, time, "a", title)));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource((TabPaneController.FXMLPATH)));
+        HistoryController historyController = fxmlLoader.getController();
+        historyController.getTbvHistory().getRoot().getChildren().add(new TreeItem<>(new HistoryView(date, url, time, "a", title)));
     }
 
     private void OnBackButtonClicked(MouseEvent e) {
@@ -132,14 +118,9 @@ public class TabContentController implements Initializable {
         });
     }
 
-    private void OnMenuButtonClicked(MouseEvent e) {
-        int a;
-        popup.show(menuButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.LEFT);
-    }
 
-    private void onHistoryButtonClicked() {
-        openHistoryTab();
-    }
+
+
 
     private void openHistoryTab() {
 
@@ -152,13 +133,13 @@ public class TabContentController implements Initializable {
 
             //Create a new tab
             Tab tab = new Tab();
-            tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
+            tab.setContent(FXMLLoader.load(getClass().getResource("/View/History.fxml")));
 
             tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
             tabPane.getSelectionModel().select(tab);
 
             tab.setText("History");
-
+            int a = 2;
         } catch (IOException e) {
             e.printStackTrace();
         }

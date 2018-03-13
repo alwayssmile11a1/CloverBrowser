@@ -25,9 +25,9 @@ public class HistoryController implements Initializable {
     public static final String FXMLPATH = "/View/History.fxml";
 
     @FXML
-    public static JFXTreeTableView tbvHistory;
-    @FXML
-    TableView tbHistory;
+    private JFXTreeTableView tbvHistory;
+    /*@FXML
+    TableView tbHistory;*/
 
     JFXTreeTableColumn<HistoryView, String> dateCol = new JFXTreeTableColumn<HistoryView, String>("Date");
 
@@ -102,6 +102,10 @@ public class HistoryController implements Initializable {
         tbvHistory.setRoot(root);
         tbvHistory.getColumns().setAll(dateCol, linkCol, timeCol, domainCol, titleCol);
         tbvHistory.setShowRoot(false);
+    }
+
+    public JFXTreeTableView getTbvHistory() {
+        return tbvHistory;
     }
 }
 

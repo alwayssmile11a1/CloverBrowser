@@ -38,7 +38,7 @@
                   </ImageView>
                    </graphic>
                </JFXButton>
-               <JFXButton fx:id="menuButton" text="" layoutX="104.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
+               <JFXButton fx:id="menuButton" visible="false" text="" layoutX="104.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
                    <graphic>
                        <ImageView>
                            <image>
