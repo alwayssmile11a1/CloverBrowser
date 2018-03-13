@@ -1,36 +1,32 @@
 package Controller;
 
 import Application.Main;
-import Model.HTMLtoPDF;
+import Model.HTMLtoPDF.HTMLtoPDFHelper;
+import Model.Printing.PrintingHelper;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
-import javafx.stage.PopupWindow;
 
-import javax.swing.text.html.HTML;
-import java.awt.print.Book;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class TabContentController implements Initializable {
 
@@ -56,7 +52,7 @@ public class TabContentController implements Initializable {
     private Button refreshButton;
 
     @FXML
-    private Button toPDFButton;
+    private Button taskButton;
 
     private String httpHeader = "https://www.";
 
@@ -64,15 +60,29 @@ public class TabContentController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         webEngine = webView.getEngine();
 
+        //add webview listener to know whether a webpage is fully loaded or not.
+        webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+            @Override
+            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
+                if(newValue !=Worker.State.SUCCEEDED)
+                {
+                    //Do something when the page is loading
+                }
+            }
+        });
+
         //load google.com by default
         webEngine.load(httpHeader + "google.com");
+        
 
         webEngine.setOnStatusChanged(new EventHandler<WebEvent<String>>() {
             @Override
             public void handle(WebEvent<String> event) {
-                addressBar.setText(webEngine.getLocation().toString());
+                onWebPageChanged();
             }
         });
+
+
 
         //region go back and go forward and refresh
         goBackButton.setOnMouseClicked(this::OnBackButtonClicked);
@@ -81,6 +91,8 @@ public class TabContentController implements Initializable {
             webEngine.reload();
         });
         //endregion
+
+
         addressBar.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -97,7 +109,24 @@ public class TabContentController implements Initializable {
         });
 
 
+        //Setting up task button
+        JFXPopup popup = new JFXPopup();
+        JFXButton toPDFButton = new JFXButton("ToPDF");
+        JFXButton printButton = new JFXButton("Printing");
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(toPDFButton, printButton);
+        popup.setPopupContent(vBox);
+
+        taskButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                popup.show(taskButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, event.getX(), event.getY());
+            }
+        });
+
+
         toPDFButton.setOnMouseClicked(event -> convertToPDF());
+        printButton.setOnMouseClicked(event -> printWebPage());
 
     }
 
@@ -120,14 +149,42 @@ public class TabContentController implements Initializable {
         Platform.runLater(() -> {
             webEngine.executeScript("history.back()");
         });
+
     }
 
     private void OnForwardButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
             webEngine.executeScript("history.forward()");
         });
+
+
     }
 
+    private void onWebPageChanged()
+    {
+        addressBar.setText(webEngine.getLocation().toString());
+
+        //disable go forward button if needed
+        if(webEngine.getHistory().getCurrentIndex() == webEngine.getHistory().getEntries().size()-1)
+        {
+            goForwardButton.setDisable(true);
+        }
+        else
+        {
+            goForwardButton.setDisable(false);
+        }
+
+        //disable go back button if needed
+        if(webEngine.getHistory().getCurrentIndex() == 0)
+        {
+            goBackButton.setDisable(true);
+        }
+        else
+        {
+            goBackButton.setDisable(false);
+        }
+
+    }
 
     public void loadPage() {
         addressBar.setFocusTraversable(false);
@@ -147,8 +204,15 @@ public class TabContentController implements Initializable {
         // The stage for show dialouge is get from MainClass stage
         File file = fileChooser.showSaveDialog(Main.getStage());
 
-        HTMLtoPDF.execute(webEngine.getLocation().toString(),file);
+        if(file!=null) {
+            HTMLtoPDFHelper.execute(webEngine.getLocation().toString(), file);
+        }
 
+    }
+
+    private void printWebPage()
+    {
+        PrintingHelper.excute(webEngine);
     }
 
 

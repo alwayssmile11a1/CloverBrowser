@@ -1,4 +1,4 @@
-package Model;
+package Model.HTMLtoPDF;
 
 import com.pdfcrowd.Client;
 import com.pdfcrowd.PdfcrowdError;
@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class HTMLtoPDF  {
+public class HTMLtoPDFHelper {
 
     public static void execute(String webUri, File file) {
 

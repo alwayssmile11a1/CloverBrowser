@@ -1,26 +1,17 @@
 package Controller;
 
-import Application.Main;
-import Model.HTMLtoPDF;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -63,12 +54,11 @@ public class TabPaneController implements Initializable{
 
         JFXButton Bookmarks = new JFXButton("Bookmarks");
 
-        JFXButton toPDFButton = new JFXButton("");
-
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(History, Bookmarks, toPDFButton);
+        vBox.getChildren().addAll(History, Bookmarks);
         popup.setPopupContent(vBox);
         menuButton.setOnMouseClicked(this::OnMenuButtonClicked);
+
 
     }
 

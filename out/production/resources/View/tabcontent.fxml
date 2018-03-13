@@ -9,8 +9,9 @@
 
 <AnchorPane fx:id="tabpage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TabContentController">
    <children>
-       <AnchorPane prefHeight="49.0" prefWidth="1000.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+       <AnchorPane prefHeight="45.0" prefWidth="1000.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
            <children>
+            <JFXButton fx:id="taskButton" layoutX="952.0" layoutY="12.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" style="-fx-background-color: #535A60" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Task" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="7.0" />
                <TextField fx:id="addressBar" layoutX="100.0" layoutY="14.0" onAction="#loadPage" prefHeight="31.0" prefWidth="755.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="5.0" />
                <JFXButton fx:id="goBackButton" layoutX="4.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="3.0">
                    <graphic>
@@ -37,12 +38,11 @@
                   </ImageView>
                    </graphic>
                </JFXButton>
-            <JFXButton fx:id="toPDFButton" layoutX="952.0" layoutY="12.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" style="-fx-background-color: #535A60" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="To PDF" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="12.0" />
            </children>
        </AnchorPane>
        <!--<MyTitleBar prefHeight="50.0" prefWidth="1013.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>-->
 
-       <WebView fx:id="webView" layoutX="144.0" layoutY="48.0" prefHeight="551.0" prefWidth="998.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="48.0" />
+       <WebView fx:id="webView" layoutX="144.0" layoutY="43.0" prefHeight="556.0" prefWidth="998.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
 
 
 

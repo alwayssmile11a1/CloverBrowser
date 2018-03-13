@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<?import javafx.scene.control.TabPane?>
 <AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TabPaneController">
    <children>
       <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" stylesheets="@../CSS/StyleSheet.css" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <tabs>
-            <Tab fx:id="addNewTabButton" closable="false" text="+" styleClass="tab-plus"/>
+            <Tab fx:id="addNewTabButton" closable="false" styleClass="tab-plus" text="+" />
          </tabs>
       </TabPane>
-       <JFXButton fx:id="menuButton" text="" layoutX="104.0" layoutY="0" mnemonicParsing="false" prefHeight="30.0" prefWidth="0.0" style="-fx-background-color: #535A60" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="2.0">
+       <JFXButton fx:id="menuButton" layoutX="104.0" layoutY="0" mnemonicParsing="false" prefHeight="30.0" prefWidth="0.0" style="-fx-background-color: #535A60" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
            <graphic>
                <ImageView>
                    <image>
