@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.ReferencableInterface.IReferencable;
+import Model.ReferencableInterface.ReferencableManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
 import javafx.event.EventHandler;
@@ -17,7 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TabPaneController implements Initializable{
+public class TabPaneController implements Initializable, IReferencable{
 
     public static final String FXMLPATH = "/View/tabpane.fxml";
 
@@ -32,6 +34,9 @@ public class TabPaneController implements Initializable{
     JFXButton Bookmarks;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        //IMPORTANT: add this to ReferencableManager to be able to access this class later
+        ReferencableManager.getInstance().add(this);
 
         addNewTab(false);
 
@@ -125,5 +130,16 @@ public class TabPaneController implements Initializable{
 
     public void changeTabText(String text){
         Bookmarks.fire();
+    }
+
+
+    @Override
+    public Object getController() {
+        return this;
+    }
+
+    @Override
+    public String getID() {
+        return FXMLPATH;
     }
 }

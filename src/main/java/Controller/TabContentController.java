@@ -3,6 +3,8 @@ package Controller;
 import Application.Main;
 import Model.HTMLtoPDF.HTMLtoPDFHelper;
 import Model.Printing.PrintingHelper;
+import Model.ReferencableInterface.IReferencable;
+import Model.ReferencableInterface.ReferencableManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
 import javafx.application.Platform;
@@ -14,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -62,40 +65,40 @@ public class TabContentController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         webEngine = webView.getEngine();
         worker = webEngine.getLoadWorker();
         worker.stateProperty().addListener(new ChangeListener<State>() {
             @Override
             public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
-                System.out.println("Loading state: " + newValue.toString());
-                if (newValue == Worker.State.SUCCEEDED) {
-                    System.out.println("Finish!");
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    try {
-                        fxmlLoader.setLocation(getClass().getResource((TabPaneController.FXMLPATH)));
-                        fxmlLoader.load();
-                        String title = webEngine.getTitle();
-                        ((TabPaneController) fxmlLoader.getController()).changeTabText("adasdasdasd");
-                        int a = 2;
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
+//                System.out.println("Loading state: " + newValue.toString());
+//                if (newValue == Worker.State.SUCCEEDED) {
+//                    System.out.println("Finish!");
+//                    FXMLLoader fxmlLoader = new FXMLLoader();
+//                    try {
+//                        fxmlLoader.setLocation(Main.class.getResource(TabPaneController.FXMLPATH));
+//                        Parent root = fxmlLoader.load();
+//                        //fxmlLoader.load();
+//                        String title = webEngine.getTitle();
+//
+//                        TabPaneController controller = fxmlLoader.getController();
+//
+//
+//
+//
+//                        int a = 2;
+//                    }
+//                    catch (Exception e){
+//                        e.printStackTrace();
+//                    }
+//                }
 
             }
         });
 
-        //add webview listener to know whether a webpage is fully loaded or not.
-        webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
-            @Override
-            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
-                if(newValue !=Worker.State.SUCCEEDED)
-                {
-                    //Do something when the page is loading
-                }
-            }
-        });
+        TabPaneController tabPaneController = (TabPaneController) (ReferencableManager.getInstance().get(TabPaneController.FXMLPATH));
+
+        
 
         //load google.com by default
         webEngine.load(httpHeader + "google.com");
