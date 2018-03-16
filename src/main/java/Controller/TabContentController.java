@@ -22,10 +22,11 @@ import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.concurrent.Worker;
+import javafx.concurrent.Worker.State;
 
 
 public class TabContentController implements Initializable {
@@ -34,6 +35,7 @@ public class TabContentController implements Initializable {
 
     //manage web pages
     private WebEngine webEngine;
+    Worker<Void> worker;
 
     //FXML variables
     @FXML
@@ -56,9 +58,33 @@ public class TabContentController implements Initializable {
 
     private String httpHeader = "https://www.";
 
+    private TabPaneController tabPaneController;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         webEngine = webView.getEngine();
+        worker = webEngine.getLoadWorker();
+        worker.stateProperty().addListener(new ChangeListener<State>() {
+            @Override
+            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
+                System.out.println("Loading state: " + newValue.toString());
+                if (newValue == Worker.State.SUCCEEDED) {
+                    System.out.println("Finish!");
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    try {
+                        fxmlLoader.setLocation(getClass().getResource((TabPaneController.FXMLPATH)));
+                        fxmlLoader.load();
+                        String title = webEngine.getTitle();
+                        ((TabPaneController) fxmlLoader.getController()).changeTabText("adasdasdasd");
+                        int a = 2;
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
 
         //add webview listener to know whether a webpage is fully loaded or not.
         webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {

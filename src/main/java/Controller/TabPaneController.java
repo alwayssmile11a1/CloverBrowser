@@ -12,6 +12,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.awt.print.Book;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,7 +29,7 @@ public class TabPaneController implements Initializable{
 
     private JFXPopup popup;
 
-
+    JFXButton Bookmarks;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -52,7 +53,10 @@ public class TabPaneController implements Initializable{
             addNewTab(true);
         });
 
-        JFXButton Bookmarks = new JFXButton("Bookmarks");
+        Bookmarks = new JFXButton("Bookmarks");
+        Bookmarks.setOnMouseClicked(e->{
+            tabPane.getSelectionModel().getSelectedItem().setText("Text Changed");
+        });
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(History, Bookmarks);
@@ -114,5 +118,12 @@ public class TabPaneController implements Initializable{
     }
 
 
+    public Tab getCurrentTab(){
+        Tab tab = tabPane.getSelectionModel().getSelectedItem();
+        return tab;
+    }
 
+    public void changeTabText(String text){
+        Bookmarks.fire();
+    }
 }
