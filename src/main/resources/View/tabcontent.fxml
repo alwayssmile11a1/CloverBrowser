@@ -45,7 +45,6 @@
        <!--<MyTitleBar prefHeight="50.0" prefWidth="1013.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>-->
 
        <WebView fx:id="webView" layoutX="144.0" layoutY="43.0" prefHeight="556.0" prefWidth="998.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
-      <JFXButton layoutX="854.0" layoutY="42.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="145.0" text="Button" AnchorPane.bottomAnchor="527.0" AnchorPane.leftAnchor="854.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
 
 
 

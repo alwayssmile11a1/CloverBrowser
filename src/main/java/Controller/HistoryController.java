@@ -4,6 +4,9 @@ import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -16,7 +19,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -31,8 +39,18 @@ public class HistoryController implements Initializable, IReferencable {
 
     @FXML
     private JFXTreeTableView tbvHistory;
-    /*@FXML
-    TableView tbHistory;*/
+
+    @FXML
+    private AnchorPane searchBar;
+
+    @FXML
+    private GridPane actionBar;
+
+    @FXML
+    Button test;
+
+    @FXML
+    private Button cancleButton;
 
     JFXTreeTableColumn<HistoryView, String> dateCol = new JFXTreeTableColumn<HistoryView, String>("Date");
 
@@ -46,11 +64,14 @@ public class HistoryController implements Initializable, IReferencable {
 
     TreeItem<HistoryView> root;
 
+    TranslateTransition actionBarTransition, searchBarTransition;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (ReferencableManager.getInstance().contain(this)){
             ReferencableManager.getInstance().add(this);
         }
+        //region add columns and data
         addColumns();
         try{
 
@@ -67,6 +88,32 @@ public class HistoryController implements Initializable, IReferencable {
             System.out.println(getClass().getSimpleName());
             e.printStackTrace();
         }
+        //endregion
+
+        //region actionBar transition
+        actionBarTransition = new TranslateTransition();
+        actionBarTransition.setDuration(Duration.millis(500));
+        actionBarTransition.setNode(actionBar);
+        //endregion
+
+        //region searchBar transition
+        searchBarTransition = new TranslateTransition();
+        searchBarTransition.setDuration(Duration.millis(500));
+        searchBarTransition.setNode(searchBar);
+        //endregion
+
+        test.setOnMouseClicked(e->{
+            playTransition(60);
+        });
+
+        cancleButton.setOnMouseClicked(e->{
+            playTransition(-60);
+
+        });
+
+        tbvHistory.setOnMouseClicked(e->{
+
+        });
     }
 
     private void addColumns(){
@@ -138,6 +185,11 @@ public class HistoryController implements Initializable, IReferencable {
     @Override
     public Object getController() {
         return this;
+    }
+
+    private void playTransition(int a){
+        actionBarTransition.setToY(a);
+        actionBarTransition.play();
     }
 }
 
