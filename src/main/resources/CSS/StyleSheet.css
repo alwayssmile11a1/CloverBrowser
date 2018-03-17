@@ -17,14 +17,14 @@
     -fx-border-color: -fx-secondary;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
-    -fx-text-fill: -fx-primarytext;
+    -fx-text-fill: white;
     /*-fx-graphic: url('http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/128/Pizza-icon.png');*/
 }
 
 .capsule-button:hover{
     -fx-border-color: -fx-secondary;
     -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-primary;
+    -fx-text-fill: -fx-main;
     /*-fx-graphic: url('http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/128/Pizza-icon.png');*/
 }
 

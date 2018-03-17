@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
@@ -26,10 +27,6 @@ public class TabPaneController implements Initializable, IReferencable{
 
     @FXML
     private TabPane tabPane;
-    @FXML
-    private Button menuButton;
-
-    private JFXPopup popup;
 
     JFXButton Bookmarks;
     @Override
@@ -50,25 +47,6 @@ public class TabPaneController implements Initializable, IReferencable{
                 }
             }
         });
-
-        popup = new JFXPopup(menuButton);
-
-        JFXButton History = new JFXButton("History");
-        History.setOnMouseClicked(e->{
-            addNewTab(true);
-        });
-
-        Bookmarks = new JFXButton("Bookmarks");
-        Bookmarks.setOnMouseClicked(e->{
-            tabPane.getSelectionModel().getSelectedItem().setText("Text Changed");
-        });
-
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(History, Bookmarks);
-        popup.setPopupContent(vBox);
-        menuButton.setOnMouseClicked(this::OnMenuButtonClicked);
-
-
     }
 
     //add a new tab
@@ -86,6 +64,7 @@ public class TabPaneController implements Initializable, IReferencable{
                 tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
                 //Google.com by default
                 tab.setText("Google.com");
+                tab.setTooltip(new Tooltip("Google.com"));
             }
             else
             {
@@ -113,23 +92,8 @@ public class TabPaneController implements Initializable, IReferencable{
         addNewTab(false);
     }
 
-    public TabPane getTabPane() {
-        return tabPane;
-    }
-
-    private void OnMenuButtonClicked(MouseEvent e) {
-        double a = menuButton.getScene().getWidth();
-        popup.show(menuButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, e.getX(), e.getY());
-    }
-
-
-    public Tab getCurrentTab(){
-        Tab tab = tabPane.getSelectionModel().getSelectedItem();
-        return tab;
-    }
-
     public void changeTabText(String text){
-        Bookmarks.fire();
+        tabPane.getSelectionModel().getSelectedItem().setText(text);
     }
 
 

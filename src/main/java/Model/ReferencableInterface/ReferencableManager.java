@@ -40,6 +40,10 @@ public class ReferencableManager {
         }
     }
 
+    public boolean contain(IReferencable iReferencable){
+        return referencableMap.containsKey(iReferencable.getID());
+    }
+
 
 
 

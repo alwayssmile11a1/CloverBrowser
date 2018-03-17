@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXPopup;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
@@ -25,11 +26,13 @@ import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
-import java.io.File;
+
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
+import javafx.stage.PopupWindow;
 
 
 public class TabContentController implements Initializable {
@@ -39,6 +42,7 @@ public class TabContentController implements Initializable {
     //manage web pages
     private WebEngine webEngine;
     Worker<Void> worker;
+    WebHistory webHistory;
 
     //FXML variables
     @FXML
@@ -59,46 +63,68 @@ public class TabContentController implements Initializable {
     @FXML
     private Button taskButton;
 
+    @FXML
+    private ProgressBar progressLoad;
+
     private String httpHeader = "https://www.";
 
-    private TabPaneController tabPaneController;
+    private JFXPopup popup;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         webEngine = webView.getEngine();
+
+        webHistory = webEngine.getHistory();
+        webHistory.getEntries().addListener(new ListChangeListener<WebHistory.Entry>() {
+            @Override
+            public void onChanged(Change<? extends WebHistory.Entry> c) {
+                //int n = c.getAddedSize();
+                ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)c.getList();
+
+                int a = 2;
+            }
+        });
+
+        //region worker
         worker = webEngine.getLoadWorker();
         worker.stateProperty().addListener(new ChangeListener<State>() {
             @Override
             public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
-//                System.out.println("Loading state: " + newValue.toString());
-//                if (newValue == Worker.State.SUCCEEDED) {
-//                    System.out.println("Finish!");
-//                    FXMLLoader fxmlLoader = new FXMLLoader();
-//                    try {
-//                        fxmlLoader.setLocation(Main.class.getResource(TabPaneController.FXMLPATH));
-//                        Parent root = fxmlLoader.load();
-//                        //fxmlLoader.load();
-//                        String title = webEngine.getTitle();
-//
-//                        TabPaneController controller = fxmlLoader.getController();
-//
-//
-//
-//
-//                        int a = 2;
-//                    }
-//                    catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                }
+                System.out.println("Loading state: " + newValue.toString());
+                if (newValue == Worker.State.SUCCEEDED) {
+                    System.out.println("Finish!");
+                    try {
+                        String title = webEngine.getTitle();
+                        TabPaneController tabPaneController = (TabPaneController) (ReferencableManager.getInstance().get(TabPaneController.FXMLPATH));
+                        tabPaneController.changeTabText(title);
+                        progressLoad.setVisible(false);
+                        //region add to history
+                        int i = webHistory.getEntries().size() - 1;
+                        WebHistory.Entry entry = webHistory.getEntries().get(i);
+                        String url = entry.getUrl();
+                        String[] temp = entry.getLastVisitedDate().toString().split(" ");
+                        String date = temp[2] + " " + temp[1] + " " + temp[5];
+                        String time = temp[3];
+                        String domain = url.split("/")[2].substring(4);
+                        String separator="´";
+                        String history = url+separator+date+separator+time+separator+title+separator+domain+"\r\n";
+                        FileWriter fileWriter = new FileWriter("history.txt", true);
+                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                        bufferedWriter.append(history);
+                        bufferedWriter.close();
+                        fileWriter.close();
+                        int a = 2;
+                        //endregion
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
 
             }
         });
-
-        TabPaneController tabPaneController = (TabPaneController) (ReferencableManager.getInstance().get(TabPaneController.FXMLPATH));
-
-        
+        //endregion
 
         //load google.com by default
         webEngine.load(httpHeader + "google.com");
@@ -137,13 +163,15 @@ public class TabContentController implements Initializable {
             }
         });
 
-
+        //region task button
         //Setting up task button
-        JFXPopup popup = new JFXPopup();
+        popup = new JFXPopup();
+        JFXButton historyButton = new JFXButton("History");
+        JFXButton bookmarkButton = new JFXButton("Bookmarks");
         JFXButton toPDFButton = new JFXButton("ToPDF");
         JFXButton printButton = new JFXButton("Printing");
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(toPDFButton, printButton);
+        vBox.getChildren().addAll(historyButton, bookmarkButton, toPDFButton, printButton);
         popup.setPopupContent(vBox);
 
         taskButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -156,23 +184,10 @@ public class TabContentController implements Initializable {
 
         toPDFButton.setOnMouseClicked(event -> convertToPDF());
         printButton.setOnMouseClicked(event -> printWebPage());
-
+        historyButton.setOnMouseClicked(e->addHistoryTab());
+        //endregion
     }
 
-    private void addToHistory() {
-        ObservableList<WebHistory.Entry> entries = webEngine.getHistory().getEntries();
-        int i = entries.size() - 1;
-        String url = entries.get(i).getUrl();
-        String title = entries.get(i).getTitle();
-        String[] temp = entries.get(i).getLastVisitedDate().toString().split(" ");
-        String date = temp[2] + " " + temp[1] + " " + temp[5];
-        String time = temp[3];
-
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource((TabPaneController.FXMLPATH)));
-        HistoryController historyController = fxmlLoader.getController();
-        historyController.getTbvHistory().getRoot().getChildren().add(new TreeItem<>(new HistoryView(date, url, time, "a", title)));
-    }
 
     private void OnBackButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
@@ -191,6 +206,8 @@ public class TabContentController implements Initializable {
 
     private void onWebPageChanged()
     {
+        progressLoad.setVisible(true);
+        progressLoad.progressProperty().bind(worker.progressProperty());
         addressBar.setText(webEngine.getLocation().toString());
 
         //disable go forward button if needed
@@ -244,5 +261,9 @@ public class TabContentController implements Initializable {
         PrintingHelper.excute(webEngine);
     }
 
-
+    private void addHistoryTab(){
+        TabPaneController tabPaneController = (TabPaneController)ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
+        tabPaneController.addNewTab(true);
+        popup.hide();
+    }
 }

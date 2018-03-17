@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.ReferencableInterface.IReferencable;
+import Model.ReferencableInterface.ReferencableManager;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,12 +18,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class HistoryController implements Initializable {
+public class HistoryController implements Initializable, IReferencable {
     public static final String FXMLPATH = "/View/History.fxml";
 
     @FXML
@@ -39,9 +44,29 @@ public class HistoryController implements Initializable {
 
     JFXTreeTableColumn<HistoryView, String> titleCol = new JFXTreeTableColumn<HistoryView, String>("Title");
 
+    TreeItem<HistoryView> root;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (ReferencableManager.getInstance().contain(this)){
+            ReferencableManager.getInstance().add(this);
+        }
         addColumns();
+        try{
+
+            FileReader fileReader = new FileReader("history.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferedReader.readLine())!=null){
+                String[] temp = line.split("´");
+                HistoryView historyView = new HistoryView(temp[1], temp[0], temp[2], temp[4], temp[3]);
+                root.getChildren().add(new TreeItem<>(historyView));
+            }
+        }
+        catch (IOException e){
+            System.out.println(getClass().getSimpleName());
+            e.printStackTrace();
+        }
     }
 
     private void addColumns(){
@@ -94,18 +119,25 @@ public class HistoryController implements Initializable {
                 new HistoryView("11/03/2018", "www.google.com", "9:31", "Google.com.vn", "Google"),
                 new HistoryView("11/03/2018", "www.youtube.com", "9:40", "youtube.com", "Youtube")
         );
-        final TreeItem<HistoryView> root = new RecursiveTreeItem<HistoryView>(new HistoryView("","","","",""),
+        root = new RecursiveTreeItem<HistoryView>(new HistoryView("","","","",""),
                 RecursiveTreeObject::getChildren);
-        list.stream().forEach((historyView)->{
-            root.getChildren().add(new TreeItem<>(historyView));
-        });
         tbvHistory.setRoot(root);
         tbvHistory.getColumns().setAll(dateCol, linkCol, timeCol, domainCol, titleCol);
-        tbvHistory.setShowRoot(false);
+        tbvHistory.setShowRoot(true);
     }
 
     public JFXTreeTableView getTbvHistory() {
         return tbvHistory;
+    }
+
+    @Override
+    public String getID() {
+        return FXMLPATH;
+    }
+
+    @Override
+    public Object getController() {
+        return this;
     }
 }
 
