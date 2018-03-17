@@ -114,11 +114,11 @@ public class HistoryController implements Initializable, IReferencable {
 
         //final TreeItem<HistoryView> root = new RecursiveTreeItem<HistoryView>(,
         //        RecursiveTreeObject::getChildren);
-        List<HistoryView> list = Arrays.<HistoryView>asList(
+        /*List<HistoryView> list = Arrays.<HistoryView>asList(
                 new HistoryView("11/03/2018", "www.facebook.com", "9:16", "facebook.com", "Facebook"),
                 new HistoryView("11/03/2018", "www.google.com", "9:31", "Google.com.vn", "Google"),
                 new HistoryView("11/03/2018", "www.youtube.com", "9:40", "youtube.com", "Youtube")
-        );
+        );*/
         root = new RecursiveTreeItem<HistoryView>(new HistoryView("","","","",""),
                 RecursiveTreeObject::getChildren);
         tbvHistory.setRoot(root);
