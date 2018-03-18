@@ -41,16 +41,10 @@ public class HistoryController implements Initializable, IReferencable {
     private JFXTreeTableView tbvHistory;
 
     @FXML
-    private AnchorPane searchBar;
-
-    @FXML
     private GridPane actionBar;
 
     @FXML
-    Button test;
-
-    @FXML
-    private Button cancleButton;
+    private Button cancelButton;
 
     JFXTreeTableColumn<HistoryView, String> dateCol = new JFXTreeTableColumn<HistoryView, String>("Date");
 
@@ -96,23 +90,17 @@ public class HistoryController implements Initializable, IReferencable {
         actionBarTransition.setNode(actionBar);
         //endregion
 
-        //region searchBar transition
-        searchBarTransition = new TranslateTransition();
-        searchBarTransition.setDuration(Duration.millis(500));
-        searchBarTransition.setNode(searchBar);
-        //endregion
-
-        test.setOnMouseClicked(e->{
-            playTransition(60);
-        });
-
-        cancleButton.setOnMouseClicked(e->{
+        cancelButton.setOnMouseClicked(e->{
             playTransition(-60);
 
         });
 
+        tbvHistory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tbvHistory.setOnMouseClicked(e->{
+            if (actionBar.getLayoutY() < 0) playTransition(60);
+            TreeItem<HistoryView> temp = (TreeItem<HistoryView>) tbvHistory.getSelectionModel().getSelectedItem();
 
+            int a = 2;
         });
     }
 
@@ -170,7 +158,7 @@ public class HistoryController implements Initializable, IReferencable {
                 RecursiveTreeObject::getChildren);
         tbvHistory.setRoot(root);
         tbvHistory.getColumns().setAll(dateCol, linkCol, timeCol, domainCol, titleCol);
-        tbvHistory.setShowRoot(true);
+        tbvHistory.setShowRoot(false);
     }
 
     public JFXTreeTableView getTbvHistory() {

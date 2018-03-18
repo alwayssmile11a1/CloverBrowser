@@ -14,7 +14,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.HistoryController">
     <children>
-        <AnchorPane fx:id="searchBar" prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <AnchorPane prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
             <children>
                 <Label style="-fx-text-fill: #FFFF8D; -fx-font-size: 20" text="History" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="17" />
                 <HBox alignment="CENTER" prefHeight="60.0" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
@@ -28,7 +28,7 @@
                 <ColumnConstraints prefWidth="200" />
                 <ColumnConstraints prefWidth="200" />
             </columnConstraints>
-            <JFXButton fx:id="cancleButton" alignment="CENTER" buttonType="RAISED" prefWidth="100" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Cancle" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" prefWidth="100" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Cancle" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                 <GridPane.margin>
                     <Insets top="12.0" />
                 </GridPane.margin>
@@ -64,6 +64,5 @@
             </TableView>-->
             <JFXTreeTableView fx:id="tbvHistory" prefHeight="326.0" prefWidth="600.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
         </AnchorPane>
-      <JFXButton fx:id="test" mnemonicParsing="false" text="Button" />
     </children>
 </AnchorPane>

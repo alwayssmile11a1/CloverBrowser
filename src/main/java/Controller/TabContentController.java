@@ -17,9 +17,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
@@ -163,15 +169,30 @@ public class TabContentController implements Initializable {
             }
         });
 
-        //region task button
+        //region task button + popup
         //Setting up task button
         popup = new JFXPopup();
         JFXButton historyButton = new JFXButton("History");
+        HBox historyHBox = new HBox();
+        try{
+            ImageView historyImage = new ImageView(new Image("../resources/Drawable/icons8-time-machine-25.png", 25, 25, false, false));
+            //historyImage.setFitHeight(25);
+            //historyImage.setFitWidth(25);
+            historyHBox.getChildren().add(historyImage);
+            historyHBox.setMargin(historyImage, new Insets(3, 0, 0, 0));
+        }
+        catch (Exception e){
+            System.out.println("TabContentController");
+            e.printStackTrace();
+        }
+        historyHBox.getChildren().add(historyButton);
+        //historyHBox.setMargin(historyButton, new Insets(0, 0, 0 ,5));
+
         JFXButton bookmarkButton = new JFXButton("Bookmarks");
         JFXButton toPDFButton = new JFXButton("ToPDF");
         JFXButton printButton = new JFXButton("Printing");
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(historyButton, bookmarkButton, toPDFButton, printButton);
+        vBox.getChildren().addAll(historyHBox, bookmarkButton, toPDFButton, printButton);
         popup.setPopupContent(vBox);
 
         taskButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
