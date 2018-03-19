@@ -180,6 +180,10 @@ public class TabContentController implements Initializable {
         //historyHBox.setMargin(historyButton, new Insets(0, 0, 0 ,5));
 
         JFXButton bookmarkButton = new JFXButton("Bookmarks");
+        HBox bookmarkHBox = new HBox();
+        addImageToPopup(bookmarkHBox, "../resources/Drawable/icons8-bookmark-25 (1).png");
+        bookmarkHBox.getChildren().add(bookmarkButton);
+        bookmarkHBox.setMargin(bookmarkButton, new Insets(5, 5, 5, 5));
 
         JFXButton toPDFButton = new JFXButton("ToPDF");
         HBox toPDFHBox = new HBox();
@@ -194,7 +198,7 @@ public class TabContentController implements Initializable {
         printHBox.setMargin(printButton, new Insets(5, 5, 5, 5));
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(historyHBox, bookmarkButton, toPDFHBox, printHBox);
+        vBox.getChildren().addAll(historyHBox, bookmarkHBox, toPDFHBox, printHBox);
         popup.setPopupContent(vBox);
 
         taskButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
