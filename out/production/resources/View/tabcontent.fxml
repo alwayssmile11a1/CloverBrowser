@@ -12,7 +12,15 @@
    <children>
        <AnchorPane prefHeight="45.0" prefWidth="1000.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
            <children>
-            <JFXButton fx:id="taskButton" layoutX="952.0" layoutY="12.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Task" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="7.0" />
+               <JFXButton fx:id="taskButton" layoutX="952.0" layoutY="10.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0" >
+                   <graphic>
+                       <ImageView>
+                           <image>
+                               <Image url="@../Drawable/icons8-menu-vertical-25.png"/>
+                           </image>
+                       </ImageView>
+                   </graphic>
+               </JFXButton>
                <TextField fx:id="addressBar" layoutX="100.0" layoutY="14.0" onAction="#loadPage" prefHeight="31.0" prefWidth="755.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="5.0" />
                <JFXButton fx:id="goBackButton" layoutX="4.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="3.0">
                    <graphic>

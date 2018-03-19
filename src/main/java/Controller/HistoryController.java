@@ -46,6 +46,9 @@ public class HistoryController implements Initializable, IReferencable {
     @FXML
     private Button cancelButton;
 
+    @FXML
+    private Label lblNumberSelectedItems;
+
     JFXTreeTableColumn<HistoryView, String> dateCol = new JFXTreeTableColumn<HistoryView, String>("Date");
 
     JFXTreeTableColumn<HistoryView, String> linkCol = new JFXTreeTableColumn<HistoryView, String>("Link");
@@ -99,7 +102,7 @@ public class HistoryController implements Initializable, IReferencable {
         tbvHistory.setOnMouseClicked(e->{
             if (actionBar.getLayoutY() < 0) playTransition(60);
             TreeItem<HistoryView> temp = (TreeItem<HistoryView>) tbvHistory.getSelectionModel().getSelectedItem();
-
+            lblNumberSelectedItems.setText(tbvHistory.getSelectionModel().getSelectedItems().size() + " selected items");
             int a = 2;
         });
     }

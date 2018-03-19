@@ -174,25 +174,27 @@ public class TabContentController implements Initializable {
         popup = new JFXPopup();
         JFXButton historyButton = new JFXButton("History");
         HBox historyHBox = new HBox();
-        try{
-            ImageView historyImage = new ImageView(new Image("../resources/Drawable/icons8-time-machine-25.png", 25, 25, false, false));
-            //historyImage.setFitHeight(25);
-            //historyImage.setFitWidth(25);
-            historyHBox.getChildren().add(historyImage);
-            historyHBox.setMargin(historyImage, new Insets(3, 0, 0, 0));
-        }
-        catch (Exception e){
-            System.out.println("TabContentController");
-            e.printStackTrace();
-        }
+        addImageToPopup(historyHBox, "../resources/Drawable/icons8-time-machine-25.png");
         historyHBox.getChildren().add(historyButton);
+        historyHBox.setMargin(historyButton, new Insets(5, 5, 5, 5));
         //historyHBox.setMargin(historyButton, new Insets(0, 0, 0 ,5));
 
         JFXButton bookmarkButton = new JFXButton("Bookmarks");
+
         JFXButton toPDFButton = new JFXButton("ToPDF");
+        HBox toPDFHBox = new HBox();
+        addImageToPopup(toPDFHBox, "../resources/Drawable/icons8-pdf-25.png");
+        toPDFHBox.getChildren().add(toPDFButton);
+        toPDFHBox.setMargin(toPDFButton, new Insets(5, 5, 5, 5));
+
         JFXButton printButton = new JFXButton("Printing");
+        HBox printHBox = new HBox();
+        addImageToPopup(printHBox, "../resources/Drawable/printer.png");
+        printHBox.getChildren().add(printButton);
+        printHBox.setMargin(printButton, new Insets(5, 5, 5, 5));
+
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(historyHBox, bookmarkButton, toPDFButton, printButton);
+        vBox.getChildren().addAll(historyHBox, bookmarkButton, toPDFHBox, printHBox);
         popup.setPopupContent(vBox);
 
         taskButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -209,6 +211,19 @@ public class TabContentController implements Initializable {
         //endregion
     }
 
+    private void addImageToPopup(HBox h, String url){
+        try{
+            ImageView imageView = new ImageView(new Image(url, 25, 25, false, false));
+            //historyImage.setFitHeight(25);
+            //historyImage.setFitWidth(25);
+            h.getChildren().add(imageView);
+            h.setMargin(imageView, new Insets(8, 8, 0, 5));
+        }
+        catch (Exception e){
+            System.out.println("TabContentController");
+            e.printStackTrace();
+        }
+    }
 
     private void OnBackButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
