@@ -11,9 +11,11 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private static Stage currentStage;
+    public static MySqlDatabase webHistoryDB;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        //region connect to mysql
         /*try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -21,10 +23,10 @@ public class Main extends Application {
             e.printStackTrace();
             return;
         }*/
-        MySqlDatabase webhistory = new MySqlDatabase();
-        webhistory.ConnectToDatabase();
+        webHistoryDB = new MySqlDatabase();
+        webHistoryDB.ConnectToDatabase();
+        //endregion
         Parent root = FXMLLoader.load(getClass().getResource("/View/tabpane.fxml"));
-        //Parent root = FXMLLoader.load(getClass().getResource("/View/History.fxml"));
         primaryStage.setTitle("Web Browser");
         primaryStage.setScene(new Scene(root, 1200, 600));
         primaryStage.getIcons().add(new Image("../resources/Drawable/three_leaf_clover.png"));

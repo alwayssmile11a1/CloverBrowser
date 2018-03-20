@@ -2,6 +2,7 @@ package Controller;
 
 import Application.Main;
 import Model.HTMLtoPDF.HTMLtoPDFHelper;
+import Model.MySqlDatabase.MySqlDatabase;
 import Model.Printing.PrintingHelper;
 import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
@@ -35,6 +36,8 @@ import javafx.stage.FileChooser;
 
 import java.io.*;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
@@ -82,7 +85,7 @@ public class TabContentController implements Initializable {
         webEngine = webView.getEngine();
 
         webHistory = webEngine.getHistory();
-        webHistory.getEntries().addListener(new ListChangeListener<WebHistory.Entry>() {
+        /*webHistory.getEntries().addListener(new ListChangeListener<WebHistory.Entry>() {
             @Override
             public void onChanged(Change<? extends WebHistory.Entry> c) {
                 //int n = c.getAddedSize();
@@ -90,7 +93,7 @@ public class TabContentController implements Initializable {
 
                 int a = 2;
             }
-        });
+        });*/
 
         //region worker
         worker = webEngine.getLoadWorker();
@@ -105,12 +108,12 @@ public class TabContentController implements Initializable {
                         TabPaneController tabPaneController = (TabPaneController) (ReferencableManager.getInstance().get(TabPaneController.FXMLPATH));
                         tabPaneController.changeTabText(title);
                         progressLoad.setVisible(false);
-                        //region add to history
+                        //region add to file history
                         int i = webHistory.getEntries().size() - 1;
                         WebHistory.Entry entry = webHistory.getEntries().get(i);
                         String url = entry.getUrl();
                         String[] temp = entry.getLastVisitedDate().toString().split(" ");
-                        String date = temp[2] + " " + temp[1] + " " + temp[5];
+                        String date = temp[5] + "-" + MonthToNum(temp[1]) + "-" + temp[2];
                         String time = temp[3];
                         String domain = url.split("/")[2].substring(4);
                         String separator="´";
@@ -122,8 +125,20 @@ public class TabContentController implements Initializable {
                         fileWriter.close();
                         int a = 2;
                         //endregion
+
+                        //region add to DB
+                        PreparedStatement preparedStatement = MySqlDatabase.getInstance().getConnection().prepareStatement("INSERT INTO history value (?,?,?,?,?)");
+                        preparedStatement.setString(1, url);
+                        preparedStatement.setString(2, date);
+                        preparedStatement.setString(3, time);
+                        preparedStatement.setString(4, title);
+                        preparedStatement.setString(5, domain);
+                        preparedStatement.executeUpdate();
+                        MySqlDatabase.getInstance().getConnection().close();
+                        //endregion
                     }
                     catch (Exception e){
+                        System.out.println("changed");
                         e.printStackTrace();
                     }
                 }
@@ -305,5 +320,23 @@ public class TabContentController implements Initializable {
         TabPaneController tabPaneController = (TabPaneController)ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
         tabPaneController.addNewTab(true);
         popup.hide();
+    }
+
+    private String MonthToNum(String m){
+        switch (m){
+            case "Jan": return "01";
+            case "Feb": return "02";
+            case "Mar": return "03";
+            case "Apr": return "04";
+            case "May": return "05";
+            case "Jun": return "06";
+            case "Jul": return "07";
+            case "Aug": return "08";
+            case "Sep": return "09";
+            case "Oct": return "10";
+            case "Nov": return "11";
+            case "Dec": return "12";
+            default:return"";
+        }
     }
 }

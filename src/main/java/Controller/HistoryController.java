@@ -100,9 +100,10 @@ public class HistoryController implements Initializable, IReferencable {
 
         tbvHistory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tbvHistory.setOnMouseClicked(e->{
-            if (actionBar.getLayoutY() < 0) playTransition(60);
+            int numberOfSelectedItems = tbvHistory.getSelectionModel().getSelectedItems().size();
+            if (actionBar.getLayoutY() < 0 && numberOfSelectedItems > 0) playTransition(60);
             TreeItem<HistoryView> temp = (TreeItem<HistoryView>) tbvHistory.getSelectionModel().getSelectedItem();
-            lblNumberSelectedItems.setText(tbvHistory.getSelectionModel().getSelectedItems().size() + " selected items");
+            lblNumberSelectedItems.setText(numberOfSelectedItems + " selected items");
             int a = 2;
         });
     }

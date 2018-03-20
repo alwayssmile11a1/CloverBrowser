@@ -22,8 +22,9 @@
                 </HBox>
             </children>
         </AnchorPane>
-        <GridPane fx:id="actionBar" layoutY="-60.0" prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <GridPane fx:id="actionBar" layoutY="-60.0" prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <columnConstraints>
+                <ColumnConstraints prefWidth="200" />
                 <ColumnConstraints prefWidth="200" />
                 <ColumnConstraints prefWidth="200" />
                 <ColumnConstraints prefWidth="200" />
@@ -36,6 +37,11 @@
             <JFXButton fx:id="deleteButton" alignment="CENTER" buttonType="RAISED" prefWidth="100" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Delete" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                 <GridPane.margin>
                     <Insets top="12.0" />
+                </GridPane.margin>
+            </JFXButton>
+            <JFXButton fx:id="gotoWebsiteButton" alignment="CENTER" buttonType="RAISED" prefWidth="100" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Go" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <GridPane.margin>
+                    <Insets top="12"/>
                 </GridPane.margin>
             </JFXButton>
             <Label fx:id="lblNumberSelectedItems" style="-fx-text-fill: white" text="0 selected" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
