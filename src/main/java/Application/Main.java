@@ -1,5 +1,6 @@
 package Application;
 
+import Model.MySqlDatabase.MySqlDatabase;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +14,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        /*try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Where is your MySQL JDBC Driver?");
+            e.printStackTrace();
+            return;
+        }*/
+        MySqlDatabase webhistory = new MySqlDatabase();
+        webhistory.ConnectToDatabase();
         Parent root = FXMLLoader.load(getClass().getResource("/View/tabpane.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("/View/History.fxml"));
         primaryStage.setTitle("Web Browser");
