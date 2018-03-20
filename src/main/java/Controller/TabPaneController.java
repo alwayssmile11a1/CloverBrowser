@@ -35,7 +35,7 @@ public class TabPaneController implements Initializable, IReferencable{
         //IMPORTANT: add this to ReferencableManager to be able to access this class later
         ReferencableManager.getInstance().add(this);
 
-        addNewTab(false);
+        addNewTab();
 
         //
         tabPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -50,7 +50,7 @@ public class TabPaneController implements Initializable, IReferencable{
     }
 
     //add a new tab
-    public Tab addNewTab(boolean addHistory)
+    public Tab addNewTab()
     {
         try {
             //Create a new tab
@@ -59,24 +59,15 @@ public class TabPaneController implements Initializable, IReferencable{
             //Set content to tabcontent.fxml
             //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
             //it will prevent your tabcontent.fxml to fill the entire tab
-            if(!addHistory)
-            {
+                TabContentController.loadDefault=true;
+
                 tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
                 //Google.com by default
                 tab.setText("Google.com");
                 tab.setTooltip(new Tooltip("Google.com"));
-            }
-            else
-            {
-                tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
-                tab.setText("History");
-            }
 
             tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
             tabPane.getSelectionModel().select(tab);
-
-
-
             return tab;
 
         } catch (IOException e) {
@@ -86,14 +77,63 @@ public class TabPaneController implements Initializable, IReferencable{
         return null;
     }
 
+    public Tab addNewTab(String url)
+    {
+        try {
+            //Create a new tab
+            Tab tab = new Tab();
+
+            //Set content to tabcontent.fxml
+            //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
+            //it will prevent your tabcontent.fxml to fill the entire tab
+            TabContentController.loadDefault=false;
+            TabContentController.link = url;
+            tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
+            //Google.com by default
+            //tab.setText("Google.com");
+            //tab.setTooltip(new Tooltip("Google.com"));
+
+            tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
+            tabPane.getSelectionModel().select(tab);
+            return tab;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public Tab addNewTab(boolean addHistory)
+    {
+        try {
+            //Create a new tab
+            Tab tab = new Tab();
+
+            //Set content to tabcontent.fxml
+            //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
+            //it will prevent your tabcontent.fxml to fill the entire tab
+                tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
+                tab.setText("History");
+
+            tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
+            tabPane.getSelectionModel().select(tab);
+            return tab;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     private void onAddNewTabButtonClicked()
     {
-        addNewTab(false);
+        addNewTab();
     }
 
     public void changeTabText(String text){
         tabPane.getSelectionModel().getSelectedItem().setText(text);
+        tabPane.getSelectionModel().getSelectedItem().setTooltip(new Tooltip(text));
     }
 
 

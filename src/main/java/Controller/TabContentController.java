@@ -8,6 +8,7 @@ import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
+import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,7 +45,7 @@ import javafx.concurrent.Worker.State;
 import javafx.stage.PopupWindow;
 
 
-public class TabContentController implements Initializable {
+public class TabContentController implements Initializable{
 
     public static final String FXMLPATH = "/View/tabcontent.fxml";
 
@@ -78,22 +79,31 @@ public class TabContentController implements Initializable {
     private String httpHeader = "https://www.";
 
     private JFXPopup popup;
+    public static boolean loadDefault = true;
+
+    public static String link;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         webEngine = webView.getEngine();
 
         webHistory = webEngine.getHistory();
-        /*webHistory.getEntries().addListener(new ListChangeListener<WebHistory.Entry>() {
+        webHistory.getEntries().addListener(new ListChangeListener<WebHistory.Entry>() {
             @Override
             public void onChanged(Change<? extends WebHistory.Entry> c) {
                 //int n = c.getAddedSize();
                 ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)c.getList();
+                addressBar.setText(listEntry.get(listEntry.size()-1).getUrl());
+                /*try{
 
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }*/
+                webEngine.reload();
                 int a = 2;
             }
-        });*/
+        });
 
         //region worker
         worker = webEngine.getLoadWorker();
@@ -102,6 +112,7 @@ public class TabContentController implements Initializable {
             public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
                 System.out.println("Loading state: " + newValue.toString());
                 if (newValue == Worker.State.SUCCEEDED) {
+                    ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)webHistory.getEntries();
                     System.out.println("Finish!");
                     try {
                         String title = webEngine.getTitle();
@@ -134,7 +145,7 @@ public class TabContentController implements Initializable {
                         preparedStatement.setString(4, title);
                         preparedStatement.setString(5, domain);
                         preparedStatement.executeUpdate();
-                        MySqlDatabase.getInstance().getConnection().close();
+                        MySqlDatabase.getInstance().Disconnect();
                         //endregion
                     }
                     catch (Exception e){
@@ -148,7 +159,10 @@ public class TabContentController implements Initializable {
         //endregion
 
         //load google.com by default
-        webEngine.load(httpHeader + "google.com");
+        if (loadDefault)
+            webEngine.load(httpHeader + "google.com");
+        else
+            webEngine.load(httpHeader + link);
         
 
         webEngine.setOnStatusChanged(new EventHandler<WebEvent<String>>() {
@@ -263,7 +277,6 @@ public class TabContentController implements Initializable {
     {
         progressLoad.setVisible(true);
         progressLoad.progressProperty().bind(worker.progressProperty());
-        addressBar.setText(webEngine.getLocation().toString());
 
         //disable go forward button if needed
         if(webEngine.getHistory().getCurrentIndex() == webEngine.getHistory().getEntries().size()-1)
@@ -322,6 +335,7 @@ public class TabContentController implements Initializable {
         popup.hide();
     }
 
+    @NotNull
     private String MonthToNum(String m){
         switch (m){
             case "Jan": return "01";
@@ -339,4 +353,5 @@ public class TabContentController implements Initializable {
             default:return"";
         }
     }
+
 }

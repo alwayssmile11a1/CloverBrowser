@@ -52,7 +52,7 @@
 
 .tab{
     -fx-background-color: -fx-main;
-    -fx-pref-width: 150;
+    -fx-pref-width: 170;
     -fx-pref-height: 40;
 }
 .tab-label{

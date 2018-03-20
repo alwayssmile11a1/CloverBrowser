@@ -54,6 +54,8 @@ public class MySqlDatabase {
     public void Disconnect(){
             try {
                 connection.close();
+                instance = null;
+
             }
             catch (SQLException e){
                 e.printStackTrace();

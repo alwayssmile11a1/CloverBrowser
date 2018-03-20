@@ -1,9 +1,11 @@
 package Controller;
 
+import Model.MySqlDatabase.MySqlDatabase;
 import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.sun.istack.internal.NotNull;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -26,10 +28,14 @@ import javafx.scene.shape.Path;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
+import javax.swing.plaf.nimbus.State;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -48,6 +54,9 @@ public class HistoryController implements Initializable, IReferencable {
 
     @FXML
     private Label lblNumberSelectedItems;
+
+    @FXML
+    private Button gotoWebsiteButton;
 
     JFXTreeTableColumn<HistoryView, String> dateCol = new JFXTreeTableColumn<HistoryView, String>("Date");
 
@@ -70,7 +79,7 @@ public class HistoryController implements Initializable, IReferencable {
         }
         //region add columns and data
         addColumns();
-        try{
+        /*try{
 
             FileReader fileReader = new FileReader("history.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -83,6 +92,24 @@ public class HistoryController implements Initializable, IReferencable {
         }
         catch (IOException e){
             System.out.println(getClass().getSimpleName());
+            e.printStackTrace();
+        }*/
+        try{
+            Statement statement = MySqlDatabase.getInstance().getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM history");
+            while (resultSet.next()){
+                String url = resultSet.getString("url");
+                String date = resultSet.getString("accessdate");
+                String time = resultSet.getString("accesstime");
+                String title = resultSet.getString("title");
+                String domain = resultSet.getString("domain");
+                HistoryView historyView = new HistoryView(date, url, time, domain, title);
+                root.getChildren().add(new TreeItem<>(historyView));
+            }
+            MySqlDatabase.getInstance().Disconnect();
+        }
+        catch (SQLException e){
+            System.out.println("History controller initialize");
             e.printStackTrace();
         }
         //endregion
@@ -102,10 +129,16 @@ public class HistoryController implements Initializable, IReferencable {
         tbvHistory.setOnMouseClicked(e->{
             int numberOfSelectedItems = tbvHistory.getSelectionModel().getSelectedItems().size();
             if (actionBar.getLayoutY() < 0 && numberOfSelectedItems > 0) playTransition(60);
+            if (numberOfSelectedItems > 0 && numberOfSelectedItems < 2)
+                gotoWebsiteButton.setDisable(false);
+            else
+                gotoWebsiteButton.setDisable(true);
             TreeItem<HistoryView> temp = (TreeItem<HistoryView>) tbvHistory.getSelectionModel().getSelectedItem();
             lblNumberSelectedItems.setText(numberOfSelectedItems + " selected items");
             int a = 2;
         });
+
+        gotoWebsiteButton.setOnMouseClicked(e->gotoWebSite());
     }
 
     private void addColumns(){
@@ -182,6 +215,13 @@ public class HistoryController implements Initializable, IReferencable {
     private void playTransition(int a){
         actionBarTransition.setToY(a);
         actionBarTransition.play();
+    }
+
+    private void gotoWebSite(){
+        TreeItem<HistoryView> historyView = (TreeItem<HistoryView>)tbvHistory.getSelectionModel().getSelectedItem();
+        String url =  historyView.getValue().link.getValue().substring(8);
+        TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
+        tabPaneController.addNewTab(url);
     }
 }
 
