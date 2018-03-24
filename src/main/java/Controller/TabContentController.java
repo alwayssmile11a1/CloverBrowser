@@ -81,7 +81,7 @@ public class TabContentController implements Initializable{
     private JFXPopup popup;
     public static boolean loadDefault = true;
 
-    public static String link;
+    public static String link="google.com";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -160,9 +160,11 @@ public class TabContentController implements Initializable{
 
         //load google.com by default
         if (loadDefault)
-            webEngine.load(httpHeader + "google.com");
-        else
             webEngine.load(httpHeader + link);
+        else{
+            webEngine.load(httpHeader + link);
+            link = "google.com";
+        }
         
 
         webEngine.setOnStatusChanged(new EventHandler<WebEvent<String>>() {

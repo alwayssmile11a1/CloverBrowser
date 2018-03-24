@@ -87,7 +87,7 @@ public class TabPaneController implements Initializable, IReferencable{
             //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
             //it will prevent your tabcontent.fxml to fill the entire tab
             TabContentController.loadDefault=false;
-            TabContentController.link = url;
+            TabContentController.link = url.substring(4);
             tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
             //Google.com by default
             //tab.setText("Google.com");
