@@ -1,0 +1,43 @@
+<html><head>
+  <SCRIPT src="http://java.com/js/dtjava.js"></SCRIPT>
+<script>
+    function launchApplication(jnlpfile) {
+        dtjava.launch(            {
+                url : 'clover_main.jnlp'
+            },
+            {
+                javafx : '8.0+'
+            },
+            {}
+        );
+        return false;
+    }
+</script>
+
+<script>
+    function javafxEmbedclover_main_id() {
+        dtjava.embed(
+            {
+                id : 'clover_main_id',
+                url : 'clover_main.jnlp',
+                placeholder : 'javafx-app-placeholder',
+                width : '1200',
+                height : '600'
+            },
+            {
+                javafx : '8.0+'
+            },
+            {}
+        );
+    }
+    <!-- Embed FX application into web page once page is loaded -->
+    dtjava.addOnloadCallback(javafxEmbedclover_main_id);
+</script>
+
+</head><body>
+<h2>Test page for <b>clover_main</b></h2>
+  <b>Webstart:</b> <a href='clover_main.jnlp' onclick="return launchApplication('clover_main.jnlp');">click to launch this app as webstart</a><br><hr><br>
+
+  <!-- Applet will be inserted here -->
+  <div id='javafx-app-placeholder'></div>
+</body></html>

@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="clover">
+    <output-path>$PROJECT_DIR$/out/artifacts/clover</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="Application.Main" />
+        <option name="description" value="" />
+        <option name="height" value="600" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="nativeBundle" value="all" />
+        <option name="title" value="" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+        <option name="width" value="1200" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="clover.jar">
+        <element id="module-output" name="clover" />
+      </element>
+    </root>
+  </artifact>
+</component>
