@@ -1,8 +1,6 @@
 package Model.MySqlDatabase;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class MySqlDatabase {
     private static MySqlDatabase instance;
@@ -60,5 +58,20 @@ public class MySqlDatabase {
             catch (SQLException e){
                 e.printStackTrace();
             }
+    }
+
+    public boolean CreateTableIfUnexists(){
+        try{
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM information_schema.tables WHERE table_schema = 'webhistory' AND table_name = 'history' LIMIT 1");
+            if (resultSet.next()){
+                return true;
+            }
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }

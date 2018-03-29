@@ -25,6 +25,7 @@ public class Main extends Application {
         }*/
         webHistoryDB = new MySqlDatabase();
         webHistoryDB.ConnectToDatabase();
+        boolean TableExists = webHistoryDB.CreateTableIfUnexists();
         //endregion
         Parent root = FXMLLoader.load(getClass().getResource("/View/tabpane.fxml"));
         primaryStage.setTitle("Web Browser");
