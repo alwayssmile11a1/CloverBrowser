@@ -76,7 +76,6 @@ public class TabPaneController implements Initializable, IReferencable{
 
         return null;
     }
-
     public Tab addNewTab(String url)
     {
         try {
@@ -87,7 +86,7 @@ public class TabPaneController implements Initializable, IReferencable{
             //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
             //it will prevent your tabcontent.fxml to fill the entire tab
             TabContentController.loadDefault=false;
-            TabContentController.link = url.substring(4);
+            TabContentController.link = url;
             tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
             //Google.com by default
             //tab.setText("Google.com");
@@ -136,6 +135,9 @@ public class TabPaneController implements Initializable, IReferencable{
         tabPane.getSelectionModel().getSelectedItem().setTooltip(new Tooltip(text));
     }
 
+    public TabPane getTabPane() {
+        return tabPane;
+    }
 
     @Override
     public Object getController() {

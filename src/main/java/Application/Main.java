@@ -1,6 +1,6 @@
 package Application;
 
-import Model.MySqlDatabase.MySqlDatabase;
+import Model.SqliteDatabase.SQLiteDatabase;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private static Stage currentStage;
-    public static MySqlDatabase webHistoryDB;
+    public static SQLiteDatabase webHistoryDB;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -23,9 +23,9 @@ public class Main extends Application {
             e.printStackTrace();
             return;
         }*/
-        webHistoryDB = new MySqlDatabase();
+        webHistoryDB = new SQLiteDatabase();
         webHistoryDB.ConnectToDatabase();
-        boolean TableExists = webHistoryDB.CreateTableIfUnexists();
+        //boolean TableExists = webHistoryDB.CreateTableIfUnexists();
         //endregion
         Parent root = FXMLLoader.load(getClass().getResource("/View/tabpane.fxml"));
         primaryStage.setTitle("Web Browser");

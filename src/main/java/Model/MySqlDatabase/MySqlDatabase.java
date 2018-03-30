@@ -1,3 +1,4 @@
+/*
 package Model.MySqlDatabase;
 
 import java.sql.*;
@@ -75,3 +76,4 @@ public class MySqlDatabase {
         return false;
     }
 }
+*/

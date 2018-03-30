@@ -1,8 +1,9 @@
 package Controller;
 
-import Model.MySqlDatabase.MySqlDatabase;
+import Model.MonthToNum.MonthToNum;
 import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
+import Model.SqliteDatabase.SQLiteDatabase;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.sun.istack.internal.NotNull;
@@ -16,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -33,10 +35,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -58,6 +63,9 @@ public class HistoryController implements Initializable, IReferencable {
     @FXML
     private Button gotoWebsiteButton;
 
+    @FXML
+    private Button deleteButton;
+
     JFXTreeTableColumn<HistoryView, String> dateCol = new JFXTreeTableColumn<HistoryView, String>("Date");
 
     JFXTreeTableColumn<HistoryView, String> linkCol = new JFXTreeTableColumn<HistoryView, String>("Link");
@@ -74,7 +82,7 @@ public class HistoryController implements Initializable, IReferencable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (ReferencableManager.getInstance().contain(this)){
+        if (ReferencableManager.getInstance().contain(this)) {
             ReferencableManager.getInstance().add(this);
         }
         //region add columns and data
@@ -94,10 +102,10 @@ public class HistoryController implements Initializable, IReferencable {
             System.out.println(getClass().getSimpleName());
             e.printStackTrace();
         }*/
-        try{
-            Statement statement = MySqlDatabase.getInstance().getConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM history");
-            while (resultSet.next()){
+        try {
+            Statement statement = SQLiteDatabase.getInstance().getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + SQLiteDatabase.getInstance().getTableName());
+            while (resultSet.next()) {
                 String url = resultSet.getString("url");
                 String date = resultSet.getString("accessdate");
                 String time = resultSet.getString("accesstime");
@@ -106,11 +114,11 @@ public class HistoryController implements Initializable, IReferencable {
                 HistoryView historyView = new HistoryView(date, url, time, domain, title);
                 root.getChildren().add(new TreeItem<>(historyView));
             }
-            MySqlDatabase.getInstance().Disconnect();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("History controller initialize");
             e.printStackTrace();
+        } finally {
+            SQLiteDatabase.getInstance().Disconnect();
         }
         //endregion
 
@@ -120,13 +128,13 @@ public class HistoryController implements Initializable, IReferencable {
         actionBarTransition.setNode(actionBar);
         //endregion
 
-        cancelButton.setOnMouseClicked(e->{
+        cancelButton.setOnMouseClicked(e -> {
             playTransition(-60);
 
         });
 
         tbvHistory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        tbvHistory.setOnMouseClicked(e->{
+        tbvHistory.setOnMouseClicked(e -> {
             int numberOfSelectedItems = tbvHistory.getSelectionModel().getSelectedItems().size();
             if (actionBar.getLayoutY() < 0 && numberOfSelectedItems > 0) playTransition(60);
             if (numberOfSelectedItems > 0 && numberOfSelectedItems < 2)
@@ -138,10 +146,11 @@ public class HistoryController implements Initializable, IReferencable {
             int a = 2;
         });
 
-        gotoWebsiteButton.setOnMouseClicked(e->gotoWebSite());
+        gotoWebsiteButton.setOnMouseClicked(e -> gotoWebSite());
+        deleteButton.setOnMouseClicked(e -> deleteHistory());
     }
 
-    private void addColumns(){
+    private void addColumns() {
         dateCol.setPrefWidth(150);
         dateCol.setCellValueFactory(
                 new Callback<TreeTableColumn.CellDataFeatures<HistoryView, String>, ObservableValue<String>>() {
@@ -191,11 +200,12 @@ public class HistoryController implements Initializable, IReferencable {
                 new HistoryView("11/03/2018", "www.google.com", "9:31", "Google.com.vn", "Google"),
                 new HistoryView("11/03/2018", "www.youtube.com", "9:40", "youtube.com", "Youtube")
         );*/
-        root = new RecursiveTreeItem<HistoryView>(new HistoryView("","","","",""),
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-yyyy");
+        root = new RecursiveTreeItem<HistoryView>(new HistoryView(simpleDateFormat.format(new Date()), "", "", "", ""),
                 RecursiveTreeObject::getChildren);
         tbvHistory.setRoot(root);
         tbvHistory.getColumns().setAll(dateCol, linkCol, timeCol, domainCol, titleCol);
-        tbvHistory.setShowRoot(false);
+        tbvHistory.setShowRoot(true);
     }
 
     public JFXTreeTableView getTbvHistory() {
@@ -212,19 +222,61 @@ public class HistoryController implements Initializable, IReferencable {
         return this;
     }
 
-    private void playTransition(int a){
+    private void playTransition(int a) {
         actionBarTransition.setToY(a);
         actionBarTransition.play();
     }
 
-    private void gotoWebSite(){
-        TreeItem<HistoryView> historyView = (TreeItem<HistoryView>)tbvHistory.getSelectionModel().getSelectedItem();
-        String url =  historyView.getValue().link.getValue().substring(8);
-        TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
-        tabPaneController.addNewTab(url);
+    private void gotoWebSite() {
+        TreeItem<HistoryView> historyView = (TreeItem<HistoryView>) tbvHistory.getSelectionModel().getSelectedItem();
+        String t = historyView.getValue().date.getValue().toString();
+        if (t.length() > 7) {
+            String url = historyView.getValue().link.getValue().substring(8);
+            TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
+            tabPaneController.addNewTab(url);
+        }
+    }
+
+    private void deleteHistory() {
+        ObservableList<TreeItem<HistoryView>> histories = tbvHistory.getSelectionModel().getSelectedItems();
+        for (TreeItem<HistoryView> item : histories) {
+            String url = item.getValue().link.getValue();
+            String accessDate = item.getValue().date.getValue();
+            String accessTime = item.getValue().time.getValue();
+            if (url.equals("")) {
+                System.out.println("It's root");
+                continue;
+            }
+            try {
+                //region add to DB
+                PreparedStatement preparedStatement = SQLiteDatabase.getInstance().getConnection().prepareStatement("DELETE FROM " + SQLiteDatabase.getInstance().getTableName() + " WHERE url=? AND accessdate = ? AND accesstime = ?");
+                preparedStatement.setString(1, url);
+                preparedStatement.setString(2, accessDate);
+                preparedStatement.setString(3, accessTime);
+                preparedStatement.executeUpdate();
+                //endregion
+                System.out.println("successfully delete in db");
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            } finally {
+                SQLiteDatabase.getInstance().Disconnect();
+            }
+        }
+        List<TreeItem<HistoryView>> nodes = tbvHistory.getSelectionModel().getSelectedItems();
+        int n = nodes.size();
+        while(n > 0){
+            TreeItem<HistoryView> temp = nodes.get(0);
+            TreeItem<HistoryView> parent = nodes.get(0).getParent();
+            if (parent != null){
+                parent.getChildren().remove(nodes.get(0));
+                n--;
+            }
+            else {
+                return;
+            }
+        }
     }
 }
-
 class HistoryView extends RecursiveTreeObject<HistoryView>{
     SimpleStringProperty date;
     SimpleStringProperty link;

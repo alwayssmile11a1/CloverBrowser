@@ -2,10 +2,11 @@ package Controller;
 
 import Application.Main;
 import Model.HTMLtoPDF.HTMLtoPDFHelper;
-import Model.MySqlDatabase.MySqlDatabase;
+import Model.MonthToNum.MonthToNum;
 import Model.Printing.PrintingHelper;
 import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
+import Model.SqliteDatabase.SQLiteDatabase;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
 import com.sun.istack.internal.NotNull;
@@ -85,6 +86,7 @@ public class TabContentController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //region getEngine + getHistory
         webEngine = webView.getEngine();
 
         webHistory = webEngine.getHistory();
@@ -94,16 +96,11 @@ public class TabContentController implements Initializable{
                 //int n = c.getAddedSize();
                 ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)c.getList();
                 addressBar.setText(listEntry.get(listEntry.size()-1).getUrl());
-                /*try{
-
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }*/
                 webEngine.reload();
                 int a = 2;
             }
         });
+        //endregion
 
         //region worker
         worker = webEngine.getLoadWorker();
@@ -124,7 +121,7 @@ public class TabContentController implements Initializable{
                         WebHistory.Entry entry = webHistory.getEntries().get(i);
                         String url = entry.getUrl();
                         String[] temp = entry.getLastVisitedDate().toString().split(" ");
-                        String date = temp[5] + "-" + MonthToNum(temp[1]) + "-" + temp[2];
+                        String date = temp[5] + "-" + MonthToNum.changeMonthToNum(temp[1]) + "-" + temp[2];
                         String time = temp[3];
                         String domain = url.split("/")[2].substring(4);
                         String separator="´";
@@ -138,19 +135,21 @@ public class TabContentController implements Initializable{
                         //endregion
 
                         //region add to DB
-                        PreparedStatement preparedStatement = MySqlDatabase.getInstance().getConnection().prepareStatement("INSERT INTO history value (?,?,?,?,?)");
+                        PreparedStatement preparedStatement = SQLiteDatabase.getInstance().getConnection().prepareStatement("INSERT INTO "+ SQLiteDatabase.getInstance().getTableName() +" values (?,?,?,?,?)");
                         preparedStatement.setString(1, url);
                         preparedStatement.setString(2, date);
                         preparedStatement.setString(3, time);
                         preparedStatement.setString(4, title);
                         preparedStatement.setString(5, domain);
                         preparedStatement.executeUpdate();
-                        MySqlDatabase.getInstance().Disconnect();
                         //endregion
                     }
                     catch (Exception e){
-                        System.out.println("changed");
+                        System.out.println("tab content - worker changed");
                         e.printStackTrace();
+                    }
+                    finally {
+                        SQLiteDatabase.getInstance().Disconnect();
                     }
                 }
 
@@ -162,7 +161,12 @@ public class TabContentController implements Initializable{
         if (loadDefault)
             webEngine.load(httpHeader + link);
         else{
-            webEngine.load(httpHeader + link);
+            if (link.contains("www.")){
+                link = link.substring(4);
+                webEngine.load(httpHeader + link);
+            }
+            else
+                webEngine.load("https://"+link);
             link = "google.com";
         }
         
@@ -336,24 +340,4 @@ public class TabContentController implements Initializable{
         tabPaneController.addNewTab(true);
         popup.hide();
     }
-
-    @NotNull
-    private String MonthToNum(String m){
-        switch (m){
-            case "Jan": return "01";
-            case "Feb": return "02";
-            case "Mar": return "03";
-            case "Apr": return "04";
-            case "May": return "05";
-            case "Jun": return "06";
-            case "Jul": return "07";
-            case "Aug": return "08";
-            case "Sep": return "09";
-            case "Oct": return "10";
-            case "Nov": return "11";
-            case "Dec": return "12";
-            default:return"";
-        }
-    }
-
 }

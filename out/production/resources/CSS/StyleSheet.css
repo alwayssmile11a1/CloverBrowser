@@ -68,8 +68,8 @@
     -fx-background-color: -fx-secondary;
 }
 .tab:hover .tab-label{
-    -fx-text-fill: -fx-main;
-}
+     -fx-text-fill: -fx-main;
+ }
 
 .tab-header-background  {
     -fx-background-color: -fx-main;
