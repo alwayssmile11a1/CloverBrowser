@@ -82,7 +82,7 @@ public class HistoryController implements Initializable, IReferencable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (ReferencableManager.getInstance().contain(this)) {
+        if (!ReferencableManager.getInstance().contain(this)) {
             ReferencableManager.getInstance().add(this);
         }
         //region add columns and data

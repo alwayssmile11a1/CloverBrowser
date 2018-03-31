@@ -13,5 +13,6 @@
     <orderEntry type="library" name="Gradle: com.pdfcrowd:pdfcrowd:4.3.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.2" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.21.0" level="application" />
+    <orderEntry type="library" name="image4j-0.7" level="application" />
   </component>
 </module>

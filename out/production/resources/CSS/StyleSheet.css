@@ -57,11 +57,13 @@
 }
 .tab-label{
     -fx-text-fill: white;
+    -fx-pref-width: 135;
+    -fx-alignment: center-left;
 }
 
 .tab:selected{
     -fx-border-color: -fx-secondary;
-    -fx-border-width: 4 0 0 0
+    -fx-border-width: 4 0 0 0;
 }
 
 .tab:hover {
@@ -73,6 +75,20 @@
 
 .tab-header-background  {
     -fx-background-color: -fx-main;
+}
+
+.tab:hover .tab-close-button{
+    -fx-background-color: -fx-main;
+}
+
+.tab-close-button:hover{
+
+    -fx-background-color: red;
+}
+
+.tab .tab-close-button{
+    -fx-background-color: -fx-primarytext;
+    -fx-background-image: url("../Drawable/tab-close-button.png");
 }
 
 .tab-plus{
@@ -94,4 +110,10 @@
 .tab:selected .focus-indicator{
     -fx-focus-color: transparent;
     -fx-border-color: transparent;
+}
+
+.jfx-text-field{
+    /*-jfx-focus-color: -fx-secondary;
+    !*-jfx-unfocus-color: #fffd8c; doesn't work*!
+    -jfx-unfocus-color: cyan;*/
 }

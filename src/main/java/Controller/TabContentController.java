@@ -16,6 +16,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,17 +37,25 @@ import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
 import javafx.stage.PopupWindow;
+import net.sf.image4j.codec.ico.ICODecoder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
-public class TabContentController implements Initializable{
+public class TabContentController implements Initializable, IReferencable{
 
     public static final String FXMLPATH = "/View/tabcontent.fxml";
 
@@ -86,6 +95,9 @@ public class TabContentController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (!ReferencableManager.getInstance().contain(this)) {
+            ReferencableManager.getInstance().add(this);
+        }
         //region getEngine + getHistory
         webEngine = webView.getEngine();
 
@@ -96,7 +108,6 @@ public class TabContentController implements Initializable{
                 //int n = c.getAddedSize();
                 ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)c.getList();
                 addressBar.setText(listEntry.get(listEntry.size()-1).getUrl());
-                webEngine.reload();
                 int a = 2;
             }
         });
@@ -106,15 +117,23 @@ public class TabContentController implements Initializable{
         worker = webEngine.getLoadWorker();
         worker.stateProperty().addListener(new ChangeListener<State>() {
             @Override
-            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
+            public void changed(ObservableValue observable, Worker.State oldValue, Worker.State newValue) {
                 System.out.println("Loading state: " + newValue.toString());
                 if (newValue == Worker.State.SUCCEEDED) {
+                    //region set favicon
+                    if ("about:blank".equals(webEngine.getLocation()))
+                        return;
+                    //Determine the full url
+                    String favIconFullURL = getHostName(webEngine.getLocation()) + "favicon.ico";
+                    TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
+                    tabPaneController.setFavicon(favIconFullURL);
+                    //endregion
+                    //region store history
                     ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)webHistory.getEntries();
                     System.out.println("Finish!");
                     try {
                         String title = webEngine.getTitle();
-                        TabPaneController tabPaneController = (TabPaneController) (ReferencableManager.getInstance().get(TabPaneController.FXMLPATH));
-                        tabPaneController.changeTabText(title);
+                        //TabPaneController tabPaneController = (TabPaneController) (ReferencableManager.getInstance().get(TabPaneController.FXMLPATH));
                         progressLoad.setVisible(false);
                         //region add to file history
                         int i = webHistory.getEntries().size() - 1;
@@ -124,6 +143,7 @@ public class TabContentController implements Initializable{
                         String date = temp[5] + "-" + MonthToNum.changeMonthToNum(temp[1]) + "-" + temp[2];
                         String time = temp[3];
                         String domain = url.split("/")[2].substring(4);
+                        //region file writer
                         String separator="´";
                         String history = url+separator+date+separator+time+separator+title+separator+domain+"\r\n";
                         FileWriter fileWriter = new FileWriter("history.txt", true);
@@ -131,6 +151,7 @@ public class TabContentController implements Initializable{
                         bufferedWriter.append(history);
                         bufferedWriter.close();
                         fileWriter.close();
+                        //endregion
                         int a = 2;
                         //endregion
 
@@ -146,17 +167,19 @@ public class TabContentController implements Initializable{
                     }
                     catch (Exception e){
                         System.out.println("tab content - worker changed");
-                        e.printStackTrace();
+                        System.err.println(e.getMessage());
                     }
                     finally {
                         SQLiteDatabase.getInstance().Disconnect();
                     }
+                    //endregion
                 }
 
             }
         });
         //endregion
 
+        //region load page when createing new tab
         //load google.com by default
         if (loadDefault)
             webEngine.load(httpHeader + link);
@@ -169,12 +192,12 @@ public class TabContentController implements Initializable{
                 webEngine.load("https://"+link);
             link = "google.com";
         }
-        
+        //endregion
 
         webEngine.setOnStatusChanged(new EventHandler<WebEvent<String>>() {
             @Override
             public void handle(WebEvent<String> event) {
-                onWebPageChanged();
+                onWebPageChanged(event);
             }
         });
 
@@ -248,6 +271,17 @@ public class TabContentController implements Initializable{
         printButton.setOnMouseClicked(event -> printWebPage());
         historyButton.setOnMouseClicked(e->addHistoryTab());
         //endregion
+
+        TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
+        if (!tabPaneController.getCurrentTab().getText().equals("+") || !tabPaneController.getCurrentTab().getText().equals("history")){
+            tabPaneController.getCurrentTab().textProperty().bind(webEngine.titleProperty());
+        }
+        webEngine.titleProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                tabPaneController.changeTooltip(webEngine.getTitle());
+            }
+        });
     }
 
     private void addImageToPopup(HBox h, String url){
@@ -279,8 +313,9 @@ public class TabContentController implements Initializable{
 
     }
 
-    private void onWebPageChanged()
+    private void onWebPageChanged(WebEvent<String> event)
     {
+
         progressLoad.setVisible(true);
         progressLoad.progressProperty().bind(worker.progressProperty());
 
@@ -339,5 +374,29 @@ public class TabContentController implements Initializable{
         TabPaneController tabPaneController = (TabPaneController)ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
         tabPaneController.addNewTab(true);
         popup.hide();
+    }
+
+    public WebEngine getWebEngine() {
+        return webEngine;
+    }
+
+    private String getHostName(String urlInput) {
+        try {
+            URL url = new URL(urlInput);
+            return url.getProtocol() + "://" + url.getHost() + "/";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    @Override
+    public Object getController() {
+        return this;
+    }
+
+    @Override
+    public String getID() {
+        return FXMLPATH;
     }
 }

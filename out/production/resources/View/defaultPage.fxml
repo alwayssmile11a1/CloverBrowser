@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DefaultPageController">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+      <JFXTextField layoutX="132.0" layoutY="237.0" prefHeight="31.0" prefWidth="336.0" stylesheets="@../CSS/StyleSheet.css" />
+   </children>
+</AnchorPane>
