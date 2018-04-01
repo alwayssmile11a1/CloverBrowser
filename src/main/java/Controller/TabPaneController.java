@@ -81,7 +81,7 @@ public class TabPaneController implements Initializable, IReferencable{
             tabPane.getSelectionModel().select(tab);
             TabContentController.loadDefault=true;
             tab.setContent(FXMLLoader.load(getClass().getResource(TabContentController.FXMLPATH)));
-            //tab.setContent(FXMLLoader.load(getClass().getResource(DefaultPageController.FXMLPATH)));
+            //tab.setContent(FXMLLoader.load(getClass().getResource(CloverInfoController.FXMLPATH)));
             return tab;
 
         } catch (IOException e) {

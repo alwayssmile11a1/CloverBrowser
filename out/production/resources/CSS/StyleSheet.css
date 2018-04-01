@@ -81,10 +81,6 @@
     -fx-background-color: -fx-main;
 }
 
-.tab-close-button:hover{
-
-    -fx-background-color: red;
-}
 
 .tab .tab-close-button{
     -fx-background-color: -fx-primarytext;
@@ -116,4 +112,8 @@
     /*-jfx-focus-color: -fx-secondary;
     !*-jfx-unfocus-color: #fffd8c; doesn't work*!
     -jfx-unfocus-color: cyan;*/
+}
+
+.context-menu{
+    -fx-pref-width: 955;
 }

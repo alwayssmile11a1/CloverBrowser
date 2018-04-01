@@ -113,3 +113,7 @@
     !*-jfx-unfocus-color: #fffd8c; doesn't work*!
     -jfx-unfocus-color: cyan;*/
 }
+
+.context-menu{
+    -fx-pref-width: 955;
+}

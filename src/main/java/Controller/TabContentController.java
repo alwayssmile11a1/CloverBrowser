@@ -7,10 +7,13 @@ import Model.Printing.PrintingHelper;
 import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
 import Model.SqliteDatabase.SQLiteDatabase;
+import Model.WebProposal.WebProposal;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
 import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -22,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -29,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
@@ -45,9 +50,12 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
 import javafx.stage.PopupWindow;
+import javafx.stage.WindowEvent;
 import net.sf.image4j.codec.ico.ICODecoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -89,6 +97,9 @@ public class TabContentController implements Initializable, IReferencable{
     private String httpHeader = "https://www.";
 
     private JFXPopup popup;
+
+    private final ContextMenu contextMenu = new ContextMenu();
+
     public static boolean loadDefault = true;
 
     public static String link="google.com";
@@ -108,6 +119,7 @@ public class TabContentController implements Initializable, IReferencable{
                 //int n = c.getAddedSize();
                 ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)c.getList();
                 addressBar.setText(listEntry.get(listEntry.size()-1).getUrl());
+                contextMenu.hide();
                 int a = 2;
             }
         });
@@ -129,7 +141,6 @@ public class TabContentController implements Initializable, IReferencable{
                     tabPaneController.setFavicon(favIconFullURL);
                     //endregion
                     //region store history
-                    ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)webHistory.getEntries();
                     System.out.println("Finish!");
                     try {
                         String title = webEngine.getTitle();
@@ -179,7 +190,7 @@ public class TabContentController implements Initializable, IReferencable{
         });
         //endregion
 
-        //region load page when createing new tab
+        //region load page when creating new tab
         //load google.com by default
         if (loadDefault)
             webEngine.load(httpHeader + link);
@@ -211,7 +222,6 @@ public class TabContentController implements Initializable, IReferencable{
         });
         //endregion
 
-
         addressBar.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -220,12 +230,52 @@ public class TabContentController implements Initializable, IReferencable{
                     public void run() {
                         if (addressBar.isFocused() && !addressBar.getText().isEmpty()) {
                             addressBar.selectAll();
-
                         }
                     }
                 });
             }
         });
+        // nếu ko có set prewidth nó sẽ bị lệch
+        contextMenu.setPrefWidth(200);
+        contextMenu.setOnShowing(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                double contextMenuWidth = addressBar.getWidth();
+                contextMenu.setStyle("-fx-pref-width: "+contextMenuWidth+";");
+            }
+        });
+        addressBar.textProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                if (addressBar.getText().length()==0)
+                    contextMenu.hide();
+                else {
+                    if (addressBar.isFocused()){
+                        populateContextMenu();
+                        contextMenu.show(addressBar, Side.BOTTOM, 0, 0);
+                        // Request focus on first item
+                        if (!contextMenu.getItems().isEmpty())
+                            contextMenu.getSkin().getNode().lookup(".menu-item:nth-child(1)").requestFocus();
+                    }
+                }
+            }
+        });
+        //region add listener tường minh
+        /*final InvalidationListener textListener = v -> {
+            if (addressBar.getText().length()==0)
+                contextMenu.hide();
+            else {
+                if (addressBar.isFocused()){
+                    populateContextMenu();
+                    contextMenu.show(addressBar, Side.BOTTOM, 0, 0);
+                    // Request focus on first item
+                    if (!contextMenu.getItems().isEmpty())
+                        contextMenu.getSkin().getNode().lookup(".menu-item:nth-child(1)").requestFocus();
+                }
+            }
+        };
+        addressBar.textProperty().addListener(textListener);*/
+        //endregion
 
         //region task button + popup
         //Setting up task button
@@ -272,6 +322,7 @@ public class TabContentController implements Initializable, IReferencable{
         historyButton.setOnMouseClicked(e->addHistoryTab());
         //endregion
 
+        //region binding web title + change tooltip
         TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
         if (!tabPaneController.getCurrentTab().getText().equals("+") || !tabPaneController.getCurrentTab().getText().equals("history")){
             tabPaneController.getCurrentTab().textProperty().bind(webEngine.titleProperty());
@@ -282,6 +333,7 @@ public class TabContentController implements Initializable, IReferencable{
                 tabPaneController.changeTooltip(webEngine.getTitle());
             }
         });
+        //endregion
     }
 
     private void addImageToPopup(HBox h, String url){
@@ -388,6 +440,21 @@ public class TabContentController implements Initializable, IReferencable{
             e.printStackTrace();
             return "";
         }
+    }
+
+    private void populateContextMenu(){
+        contextMenu.getItems().clear();
+        String url = addressBar.getText();
+        contextMenu.getItems()
+                .addAll(WebProposal.getInstance(true).getWeb_proposal()
+                        .stream().filter(string -> string.toLowerCase().contains(url.toLowerCase()))
+                        .limit(6).map(MenuItem::new).collect(Collectors.toList()));
+        contextMenu.getItems().forEach(item -> item.setOnAction(e->{
+            addressBar.setText(item.getText().split("-")[0]);
+            //addressBar.positionCaret(addressBar.getLength());
+            webEngine.load(item.getText().split("-")[0]);
+        }));
+
     }
 
     @Override
