@@ -32,6 +32,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -72,7 +73,7 @@ public class TabContentController implements Initializable, IReferencable{
     Worker<Void> worker;
     WebHistory webHistory;
 
-    //FXML variables
+    //region declare variables
     @FXML
     private WebView webView;
 
@@ -104,11 +105,26 @@ public class TabContentController implements Initializable, IReferencable{
 
     public static String link="google.com";
 
+    private ContextMenu webViewContextMenu;
+    private ContextMenu tabContextMenu;
+    //endregion
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (!ReferencableManager.getInstance().contain(this)) {
             ReferencableManager.getInstance().add(this);
         }
+        webView.setContextMenuEnabled(false);
+        webView.setOnMouseClicked(e->{
+            boolean isrightMouse = e.isSecondaryButtonDown();
+            if (e.getButton() == MouseButton.SECONDARY){
+                webViewContextMenu.show(webView, e.getScreenX(), e.getScreenY());
+                tabContextMenu.show(webView, e.getScreenX()+400, e.getScreenY());
+            }
+            else if (e.getButton() == MouseButton.PRIMARY)
+                webViewContextMenu.hide();
+        });
+
         //region getEngine + getHistory
         webEngine = webView.getEngine();
 
@@ -235,6 +251,7 @@ public class TabContentController implements Initializable, IReferencable{
                 });
             }
         });
+        //region proposal list
         // nếu ko có set prewidth nó sẽ bị lệch
         contextMenu.setPrefWidth(200);
         contextMenu.setOnShowing(new EventHandler<WindowEvent>() {
@@ -244,6 +261,7 @@ public class TabContentController implements Initializable, IReferencable{
                 contextMenu.setStyle("-fx-pref-width: "+contextMenuWidth+";");
             }
         });
+        //endregion
         addressBar.textProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
@@ -321,6 +339,16 @@ public class TabContentController implements Initializable, IReferencable{
         printButton.setOnMouseClicked(event -> printWebPage());
         historyButton.setOnMouseClicked(e->addHistoryTab());
         //endregion
+
+        webViewContextMenu = new ContextMenu();
+        webViewContextMenu.setStyle("-fx-pref-width: 300;");
+        webViewContextMenu.getItems().addAll(new MenuItem("Back"), new MenuItem("Forward"), new MenuItem(("Reload")));
+
+        tabContextMenu = new ContextMenu();
+        tabContextMenu.setStyle("-fx-pref-width: 300;");
+        tabContextMenu.getItems().addAll(new MenuItem("New tab"), new MenuItem("Reload"), new MenuItem("Duplicate"),
+                                         new MenuItem("Close tab"), new MenuItem("Close other tabs"), new MenuItem("Reopen closed tab"),
+                                         new MenuItem("Bookmark all tabs"));
 
         //region binding web title + change tooltip
         TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);

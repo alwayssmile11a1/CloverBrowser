@@ -85,7 +85,7 @@ public class TabPaneController implements Initializable, IReferencable{
             return tab;
 
         } catch (IOException e) {
-            System.out.println("add new tab - TabPaneController");
+            System.err.println("add new tab - TabPaneController");
             e.printStackTrace();
         }
         return null;
