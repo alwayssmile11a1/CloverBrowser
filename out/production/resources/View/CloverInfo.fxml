@@ -4,9 +4,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import javafx.scene.image.Image?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CloverInfoController">
    <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+           <image>
+               <Image url="@../Drawable/three_leaf_clover.png" />
+           </image>
+       </ImageView>
       <JFXTextField layoutX="132.0" layoutY="237.0" prefHeight="31.0" prefWidth="336.0" stylesheets="@../CSS/StyleSheet.css" />
    </children>
 </AnchorPane>
