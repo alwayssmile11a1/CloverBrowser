@@ -323,8 +323,14 @@ public class TabContentController implements Initializable, IReferencable{
         printHBox.getChildren().add(printButton);
         printHBox.setMargin(printButton, new Insets(5, 5, 5, 5));
 
+        JFXButton infoButton = new JFXButton(("About us"));
+        HBox infoHBox = new HBox();
+        addImageToPopup(infoHBox, "../resources/Drawable/icons8-info-25.png");
+        infoHBox.getChildren().add(infoButton);
+        infoHBox.setMargin(infoButton, new Insets(5, 5, 5, 5));
+
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(historyHBox, bookmarkHBox, toPDFHBox, printHBox);
+        vBox.getChildren().addAll(historyHBox, bookmarkHBox, toPDFHBox, printHBox, infoHBox);
         popup.setPopupContent(vBox);
 
         taskButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -338,6 +344,7 @@ public class TabContentController implements Initializable, IReferencable{
         toPDFButton.setOnMouseClicked(event -> convertToPDF());
         printButton.setOnMouseClicked(event -> printWebPage());
         historyButton.setOnMouseClicked(e->addHistoryTab());
+        infoButton.setOnMouseClicked(e->addInfoTab());
         //endregion
 
         webViewContextMenu = new ContextMenu();
@@ -393,8 +400,7 @@ public class TabContentController implements Initializable, IReferencable{
 
     }
 
-    private void onWebPageChanged(WebEvent<String> event)
-    {
+    private void onWebPageChanged(WebEvent<String> event) {
 
         progressLoad.setVisible(true);
         progressLoad.progressProperty().bind(worker.progressProperty());
@@ -423,10 +429,26 @@ public class TabContentController implements Initializable, IReferencable{
 
     public void loadPage() {
         addressBar.setFocusTraversable(false);
-        webEngine.load(httpHeader + addressBar.getText());
-
+        String address = addressBar.getText();
+        if(address.contains("www") && !address.contains("http")){
+            webEngine.load("https://" + address);
+        }
+        else {
+            webEngine.load(httpHeader + address);
+        }
     }
-
+    private void LoadWithContextMenu(String url){
+        addressBar.setFocusTraversable(false);
+        if(url.contains("www") && !url.contains("http")){
+            webEngine.load("https://" + url);
+        }
+        else if(!url.contains("www") && !url.contains("http")){
+            webEngine.load(httpHeader + url);
+        }
+        else {
+            webEngine.load(url);
+        }
+    }
     private void convertToPDF()
     {
         FileChooser fileChooser = new FileChooser();
@@ -456,6 +478,12 @@ public class TabContentController implements Initializable, IReferencable{
         popup.hide();
     }
 
+    private void addInfoTab(){
+        TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
+        tabPaneController.addNewInfoTab();
+        popup.hide();
+    }
+
     public WebEngine getWebEngine() {
         return webEngine;
     }
@@ -473,14 +501,15 @@ public class TabContentController implements Initializable, IReferencable{
     private void populateContextMenu(){
         contextMenu.getItems().clear();
         String url = addressBar.getText();
+        contextMenu.getItems().add(new MenuItem(url));
         contextMenu.getItems()
                 .addAll(WebProposal.getInstance(true).getWeb_proposal()
                         .stream().filter(string -> string.toLowerCase().contains(url.toLowerCase()))
-                        .limit(6).map(MenuItem::new).collect(Collectors.toList()));
+                        .limit(5).map(MenuItem::new).collect(Collectors.toList()));
         contextMenu.getItems().forEach(item -> item.setOnAction(e->{
             addressBar.setText(item.getText().split("-")[0]);
             //addressBar.positionCaret(addressBar.getLength());
-            webEngine.load(item.getText().split("-")[0]);
+            LoadWithContextMenu(item.getText().split("-")[0]);
         }));
 
     }

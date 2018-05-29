@@ -62,8 +62,7 @@ public class TabPaneController implements Initializable, IReferencable{
     }
 
     //add a new tab
-    public Tab addNewTab()
-    {
+    public Tab addNewTab() {
         try {
             //Create a new tab
             Tab tab = new Tab();
@@ -90,8 +89,7 @@ public class TabPaneController implements Initializable, IReferencable{
         }
         return null;
     }
-    public Tab addNewTab(String url)
-    {
+    public Tab addNewTab(String url){
         try {
             //Create a new tab
             Tab tab = new Tab();
@@ -118,8 +116,7 @@ public class TabPaneController implements Initializable, IReferencable{
 
         return null;
     }
-    public Tab addNewTab(boolean addHistory)
-    {
+    public Tab addNewTab(boolean addHistory){
         try {
             //Create a new tab
             Tab tab = new Tab();
@@ -131,6 +128,26 @@ public class TabPaneController implements Initializable, IReferencable{
             tabPane.getSelectionModel().select(tab);
             tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
             tab.setText("History");
+            return tab;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public Tab addNewInfoTab(){
+        try {
+            //Create a new tab
+            Tab tab = new Tab();
+
+            //Set content to tabcontent.fxml
+            //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
+            //it will prevent your tabcontent.fxml to fill the entire tab
+            tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
+            tabPane.getSelectionModel().select(tab);
+            tab.setContent(FXMLLoader.load(getClass().getResource("/View/CloverInfo.fxml")));
+            tab.setText("About us");
             return tab;
 
         } catch (IOException e) {

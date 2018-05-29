@@ -1,17 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.image.Image?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CloverInfoController">
+<AnchorPane prefHeight="721.0" prefWidth="1693.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CloverInfoController">
    <children>
-       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="225.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="900.0" AnchorPane.topAnchor="200.0">
            <image>
                <Image url="@../Drawable/three_leaf_clover.png" />
            </image>
        </ImageView>
-      <JFXTextField layoutX="132.0" layoutY="237.0" prefHeight="31.0" prefWidth="336.0" stylesheets="@../CSS/StyleSheet.css" />
+      <Label layoutX="858.0" layoutY="373.0" text="Clover Team" AnchorPane.topAnchor="375.0">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.1717557251908397">
+               <stops>
+                  <Stop color="#00863e" />
+                  <Stop color="#c5ddd1" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
+      <Label layoutX="767.0" layoutY="423.0" text="Nguyễn Đức Thông - 15520856" AnchorPane.topAnchor="475.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.18702292305822588">
+               <stops>
+                  <Stop color="#00863e" />
+                  <Stop color="#c5ddd1" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill></Label>
+      <Label layoutX="778.0" layoutY="525.0" text="Trương Ngọc Sơn - 15520740" AnchorPane.topAnchor="575.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.30152663065276986">
+               <stops>
+                  <Stop color="#00863e" />
+                  <Stop color="#c5ddd1" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
+      <Label layoutX="761.0" layoutY="611.0" text="Trần Thị Thanh Thảo - 15520820" AnchorPane.topAnchor="675.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#00863e" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
    </children>
 </AnchorPane>

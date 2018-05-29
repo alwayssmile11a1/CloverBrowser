@@ -7,6 +7,7 @@ import Model.SqliteDatabase.SQLiteDatabase;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.sun.istack.internal.NotNull;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -104,16 +105,29 @@ public class HistoryController implements Initializable, IReferencable {
         }*/
         try {
             Statement statement = SQLiteDatabase.getInstance().getConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + SQLiteDatabase.getInstance().getTableName());
-            while (resultSet.next()) {
-                String url = resultSet.getString("url");
-                String date = resultSet.getString("accessdate");
-                String time = resultSet.getString("accesstime");
-                String title = resultSet.getString("title");
-                String domain = resultSet.getString("domain");
-                HistoryView historyView = new HistoryView(date, url, time, domain, title);
-                root.getChildren().add(new TreeItem<>(historyView));
+            PreparedStatement preparedStatement = SQLiteDatabase.getInstance().getConnection().prepareStatement("SELECT name FROM sqlite_master WHERE type=?");
+            preparedStatement.setString(1, "table");
+            ResultSet tables = preparedStatement.executeQuery();
+            while (tables.next()){
+                String name = tables.getString("name");
+                String table = name.substring(5).substring(0,2) + "-" + name.substring(5).substring(2);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-yyyy");
+                root = new RecursiveTreeItem<HistoryView>(new HistoryView(table, "", "", "", ""),
+                        RecursiveTreeObject::getChildren);
+                System.out.println(root.getValue().date);
+                tbvHistory.getRoot().getChildren().add(root);
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM " + name);
+                while (resultSet.next()) {
+                    String url = resultSet.getString("url");
+                    String date = resultSet.getString("accessdate");
+                    String time = resultSet.getString("accesstime");
+                    String title = resultSet.getString("title");
+                    String domain = resultSet.getString("domain");
+                    HistoryView historyView = new HistoryView(date, url, time, domain, title);
+                    root.getChildren().add(new TreeItem<>(historyView));
+                }
             }
+
         } catch (SQLException e) {
             System.out.println("History controller initialize");
             e.printStackTrace();
@@ -205,7 +219,7 @@ public class HistoryController implements Initializable, IReferencable {
                 RecursiveTreeObject::getChildren);
         tbvHistory.setRoot(root);
         tbvHistory.getColumns().setAll(dateCol, linkCol, timeCol, domainCol, titleCol);
-        tbvHistory.setShowRoot(true);
+        tbvHistory.setShowRoot(false);
     }
 
     public JFXTreeTableView getTbvHistory() {
