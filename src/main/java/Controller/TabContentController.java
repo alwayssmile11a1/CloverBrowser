@@ -388,6 +388,7 @@ public class TabContentController implements Initializable, IReferencable{
     private void OnBackButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
             webEngine.executeScript("history.back()");
+
         });
 
     }
@@ -395,6 +396,7 @@ public class TabContentController implements Initializable, IReferencable{
     private void OnForwardButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
             webEngine.executeScript("history.forward()");
+
         });
 
 
