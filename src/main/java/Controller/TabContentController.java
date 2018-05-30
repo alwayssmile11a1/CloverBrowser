@@ -1,6 +1,7 @@
 package Controller;
 
 import Application.Main;
+import Model.Download.DownloadHelper;
 import Model.HTMLtoPDF.HTMLtoPDFHelper;
 import Model.MonthToNum.MonthToNum;
 import Model.Printing.PrintingHelper;
@@ -369,6 +370,25 @@ public class TabContentController implements Initializable, IReferencable{
             }
         });
         //endregion
+
+
+        webEngine.locationProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println("location of engine: " + newValue);
+
+                //Check can download
+                HttpURLConnection connection = DownloadHelper.isDownloadable(webEngine.getLocation());
+                if(connection!=null)
+                {
+                    DownloadHelper.startDownload(connection, webEngine.getTitle());
+                }
+
+            }
+        });
+
+
     }
 
     private void addImageToPopup(HBox h, String url){
