@@ -1,5 +1,7 @@
 package Model.Download;
 
+import javafx.scene.control.ProgressIndicator;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +21,9 @@ public class DownloadHelper {
     }
 
 
-    public static void startDownload(HttpURLConnection connection, String title) {
+    public static void startDownload(HttpURLConnection connection, String title, ProgressIndicator indicator) {
 
-        DownloadThread thread = new DownloadThread(connection, downloadFolder(), title);
+        DownloadThread thread = new DownloadThread(connection, downloadFolder(), title, indicator);
         System.setProperty("java.net.preferIPv4Stack", "true");
         thread.start();
     }
@@ -43,7 +45,7 @@ public class DownloadHelper {
     /**
      * @return
      */
-    private static String downloadFolder() {
+    public static String downloadFolder() {
         File home = new File(System.getProperty("user.home"));
         File folder = new File(home, "Downloads");
         if (!folder.exists()) {

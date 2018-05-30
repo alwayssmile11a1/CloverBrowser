@@ -77,6 +77,10 @@
     -fx-background-color: -fx-main;
 }
 
+.tab-footer-background  {
+    -fx-background-color: -fx-primarytext;
+}
+
 .tab:hover .tab-close-button{
     -fx-background-color: -fx-main;
 }
@@ -90,6 +94,8 @@
 .tab-plus{
     -fx-pref-width: 27;
 }
+
+
 
 /*==========================*/
 /*

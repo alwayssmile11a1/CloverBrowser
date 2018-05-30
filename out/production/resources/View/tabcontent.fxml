@@ -52,6 +52,6 @@
        </AnchorPane>
        <!--<MyTitleBar prefHeight="50.0" prefWidth="1013.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>-->
 
-       <WebView fx:id="webView" layoutX="144.0" layoutY="43.0" prefHeight="556.0" prefWidth="998.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
+       <WebView fx:id="webView" layoutX="144.0" layoutY="43.0" prefHeight="559.0" prefWidth="998.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
    </children>
 </AnchorPane>

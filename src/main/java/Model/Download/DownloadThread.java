@@ -2,6 +2,8 @@
 package Model.Download;
 
 
+import javafx.scene.control.ProgressIndicator;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
@@ -15,13 +17,14 @@ public class DownloadThread extends Thread {
     private String title = "Unknown";
     private static final int BUFFER_SIZE = 4096;
     private HttpURLConnection connection;
-
-    public DownloadThread(HttpURLConnection connection, String path, String title) {
+    private  ProgressIndicator indicator;
+    public DownloadThread(HttpURLConnection connection, String path, String title, ProgressIndicator indicator) {
         this.filePath = path;
         if (title != null)
             this.title = title;
 
         this.connection = connection;
+        this.indicator = indicator;
     }
 
     /**
@@ -75,6 +78,7 @@ public class DownloadThread extends Thread {
                 //			out.write(buffer);
                 progress += len; // update progress variable
                 System.out.println("Downloaded bytes " + progress / 1024 + " KB" + "| Remaining  bytes  " + (size - progress) / 1024 + " KB");
+                indicator.setProgress(progress/(float)size);
             }
             out.flush(); // empty the buffer.
             in.close(); // close opened streams

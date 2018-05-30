@@ -9,14 +9,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -40,6 +39,13 @@ public class TabPaneController implements Initializable, IReferencable{
     @FXML
     private TabPane tabPane;
 
+    @FXML
+    private FlowPane downloadPane;
+
+    @FXML
+    private JFXButton downloadPaneCloseButton;
+
+
     JFXButton Bookmarks;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,9 +62,19 @@ public class TabPaneController implements Initializable, IReferencable{
                 if(tabPane.getSelectionModel().isSelected(tabPane.getTabs().size()-1))
                 {
                     onAddNewTabButtonClicked();
+
+
                 }
             }
         });
+
+        downloadPaneCloseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                setDownloadPaneVisible(false);
+            }
+        });
+
     }
 
     //add a new tab
@@ -213,7 +229,16 @@ public class TabPaneController implements Initializable, IReferencable{
     }
 
 
+    public void setDownloadPaneVisible(boolean visibled)
+    {
+        downloadPaneCloseButton.visibleProperty().set(visibled);
+        downloadPane.visibleProperty().set(visibled);
+    }
 
+    public FlowPane getDownLoadPane()
+    {
+        return downloadPane;
+    }
 
 
 

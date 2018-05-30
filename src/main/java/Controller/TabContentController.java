@@ -382,7 +382,31 @@ public class TabContentController implements Initializable, IReferencable{
                 HttpURLConnection connection = DownloadHelper.isDownloadable(webEngine.getLocation());
                 if(connection!=null)
                 {
-                    DownloadHelper.startDownload(connection, webEngine.getTitle());
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.load(getClass().getResource("/View/DownloadProgressButton.fxml").openStream());
+                        DownloadProgressButtonController downloadController = fxmlLoader.getController();
+
+                        Button downloadProgressButton = downloadController.getProgressButton();
+                        downloadProgressButton.setText(webEngine.getTitle());
+                        ProgressIndicator indicator =  downloadController.getProgressIndicator();
+
+
+
+                        tabPaneController.getDownLoadPane().getChildren().add(downloadProgressButton);
+                        tabPaneController.setDownloadPaneVisible(true);
+
+                        DownloadHelper.startDownload(connection, webEngine.getTitle(), indicator);
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+
                 }
 
             }
