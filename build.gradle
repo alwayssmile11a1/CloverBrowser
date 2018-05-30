@@ -14,4 +14,6 @@ dependencies {
     compile 'com.jfoenix:jfoenix:8.0.1'
     compile 'com.pdfcrowd:pdfcrowd:4.3.0'
     compile 'org.jsoup:jsoup:1.11.2'
+    compile 'org.xerial:sqlite-jdbc:3.23.1'
+    compile 'org.jclarion:image4j:0.7'
 }
