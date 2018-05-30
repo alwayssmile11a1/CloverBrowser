@@ -462,14 +462,18 @@ public class TabContentController implements Initializable, IReferencable{
         File file = fileChooser.showSaveDialog(Main.getStage());
 
         if(file!=null) {
-            HTMLtoPDFHelper.execute(webEngine.getLocation().toString(), file);
+
+           Thread thread = new Thread(new HTMLtoPDFHelper(webEngine.getLocation(), file));
+
+           thread.start();
         }
 
     }
 
     private void printWebPage()
     {
-        PrintingHelper.excute(webEngine);
+        Thread thread = new Thread((new PrintingHelper(webEngine)));
+        thread.start();
     }
 
     private void addHistoryTab(){

@@ -5,10 +5,19 @@ import Application.Main;
 import javafx.print.PrinterJob;
 import javafx.scene.web.WebEngine;
 
-public class PrintingHelper {
+public class PrintingHelper implements Runnable {
 
-    public static void excute(WebEngine webEngine)
+
+    private WebEngine webEngine;
+
+    public  PrintingHelper(WebEngine webEngine)
     {
+        this.webEngine = webEngine;
+    }
+
+
+    @Override
+    public void run() {
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null) {
             System.out.println("printing......");
@@ -18,5 +27,4 @@ public class PrintingHelper {
             }
         }
     }
-
 }
