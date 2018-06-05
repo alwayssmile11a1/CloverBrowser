@@ -120,7 +120,7 @@ public class TabContentController implements Initializable, IReferencable{
             boolean isrightMouse = e.isSecondaryButtonDown();
             if (e.getButton() == MouseButton.SECONDARY){
                 webViewContextMenu.show(webView, e.getScreenX(), e.getScreenY());
-                tabContextMenu.show(webView, e.getScreenX()+400, e.getScreenY());
+                //tabContextMenu.show(webView, e.getScreenX()+400, e.getScreenY());
             }
             else if (e.getButton() == MouseButton.PRIMARY)
                 webViewContextMenu.hide();
