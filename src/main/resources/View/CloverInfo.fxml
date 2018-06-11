@@ -5,10 +5,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="721.0" prefWidth="1693.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CloverInfoController">
+<AnchorPane prefHeight="721.0" prefWidth="1693.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CloverInfoController">
    <children>
        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="225.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="900.0" AnchorPane.topAnchor="200.0">
            <image>
@@ -45,23 +46,23 @@
             <Font size="30.0" />
          </font>
          <textFill>
-            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.30152663065276986">
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                <stops>
                   <Stop color="#00863e" />
                   <Stop color="#c5ddd1" offset="1.0" />
                </stops>
-            </LinearGradient>
+            </RadialGradient>
          </textFill>
       </Label>
-      <Label layoutX="761.0" layoutY="611.0" text="Trần Thị Thanh Thảo - 15520820" AnchorPane.topAnchor="675.0">
+      <Label layoutX="761.0" layoutY="637.0" prefHeight="84.0" prefWidth="430.0" text="Trần Thị Thanh Thảo - 15520820" AnchorPane.topAnchor="637.0">
          <font>
             <Font size="30.0" />
          </font>
          <textFill>
-            <LinearGradient endX="1.0" endY="1.0">
+            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.12380952380952376">
                <stops>
-                  <Stop color="#00863e" />
-                  <Stop color="WHITE" offset="1.0" />
+                  <Stop color="#3b8343" />
+                  <Stop color="#b0ffd7" offset="1.0" />
                </stops>
             </LinearGradient>
          </textFill>

@@ -132,7 +132,7 @@ public class TabPaneController implements Initializable, IReferencable{
 
         return null;
     }
-    public Tab addNewTab(boolean addHistory){
+    public Tab addNewTab(int type){
         try {
             //Create a new tab
             Tab tab = new Tab();
@@ -140,11 +140,20 @@ public class TabPaneController implements Initializable, IReferencable{
             //Set content to tabcontent.fxml
             //Note that in the tabcontent.fxml file, if you have maxHeight="-Infinity" and maxWidth="-Infinity",
             //it will prevent your tabcontent.fxml to fill the entire tab
-            tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
-            tabPane.getSelectionModel().select(tab);
-            tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
-            tab.setText("History");
-            return tab;
+            if (type == 1){
+                tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
+                tabPane.getSelectionModel().select(tab);
+                tab.setContent(FXMLLoader.load(getClass().getResource(HistoryController.FXMLPATH)));
+                tab.setText("History");
+                return tab;
+            }
+            if (type == 2){
+                tabPane.getTabs().add(tabPane.getTabs().size()-1,tab);
+                tabPane.getSelectionModel().select(tab);
+                tab.setContent(FXMLLoader.load(getClass().getResource(BookmarksController.FXMLPATH)));
+                tab.setText("Bookmarks");
+                return tab;
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

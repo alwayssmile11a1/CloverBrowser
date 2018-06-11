@@ -1,15 +1,17 @@
 package Model.SqliteDatabase;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
-public class SQLiteDatabase {
-    private static SQLiteDatabase instance;
-    public static SQLiteDatabase getInstance(){
+public class SqliteDatabaseBookmarks {
+    private static SqliteDatabaseBookmarks instance;
+    public static SqliteDatabaseBookmarks getInstance(){
         if (instance == null)
-            instance = new SQLiteDatabase();
+            instance = new SqliteDatabaseBookmarks();
         return instance;
     }
     private Connection connection;
@@ -19,26 +21,13 @@ public class SQLiteDatabase {
     }
 
     private String connectString;
-    private String connectStringBookmark;
 
     public String getConnectString() {
         return connectString;
     }
 
-    private String userName;
-
-    public String getUserName() {
-        return userName;
-    }
-
-    private String password;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public SQLiteDatabase(){
-        connectString = "jdbc:sqlite:webhistory.db";
+    public SqliteDatabaseBookmarks(){
+        connectString = "jdbc:sqlite:bookmarks.db";
         ConnectToDatabase();
     }
 
@@ -73,20 +62,12 @@ public class SQLiteDatabase {
         }
     }
 
-    public String getTableName(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMyyyy");
-        return "month"+simpleDateFormat.format(new Date());
-    }
-
     public boolean CreateTableIfUnexists(){
         try{
-            String query = "create table if not exists " + getTableName() + "(\n" +
+            String query = "create table if not exists 'bookmarks'" + "(\n" +
+                    "title varchar(100),\n"+
                     "url varchar(100),\n" +
-                    "accessdate date,\n" +
-                    "accesstime time,\n" +
-                    "title varchar(100),\n" +
-                    "domain varchar(30),\n" +
-                    "constraint PK_HISTORY primary key (url, accessdate, accesstime)\n" +
+                    "constraint PK_HISTORY primary key (url)\n" +
                     ");";
             Statement statement = connection.createStatement();
             statement.execute(query);
@@ -98,6 +79,4 @@ public class SQLiteDatabase {
         }
         return false;
     }
-
-
 }

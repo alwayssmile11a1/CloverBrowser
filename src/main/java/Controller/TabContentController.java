@@ -8,9 +8,12 @@ import Model.Printing.PrintingHelper;
 import Model.ReferencableInterface.IReferencable;
 import Model.ReferencableInterface.ReferencableManager;
 import Model.SqliteDatabase.SQLiteDatabase;
+import Model.SqliteDatabase.SqliteDatabaseBookmarks;
 import Model.WebProposal.WebProposal;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPopup;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -49,9 +52,12 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javafx.concurrent.Worker;
@@ -82,6 +88,9 @@ public class TabContentController implements Initializable, IReferencable{
     private TextField addressBar;
 
     @FXML
+    private Button bookMarkButton;
+
+    @FXML
     private Button goBackButton;
 
     @FXML
@@ -96,9 +105,14 @@ public class TabContentController implements Initializable, IReferencable{
     @FXML
     private ProgressBar progressLoad;
 
+    @FXML
+    private HBox bookmarkTabsHBox;
+
     private String httpHeader = "https://www.";
 
     private JFXPopup popup;
+
+    private JFXPopup bookMarkPopup;
 
     private final ContextMenu contextMenu = new ContextMenu();
 
@@ -109,7 +123,7 @@ public class TabContentController implements Initializable, IReferencable{
     private ContextMenu webViewContextMenu;
     private ContextMenu tabContextMenu;
     //endregion
-
+    TextField nameTextField;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (!ReferencableManager.getInstance().contain(this)) {
@@ -135,9 +149,142 @@ public class TabContentController implements Initializable, IReferencable{
             public void onChanged(Change<? extends WebHistory.Entry> c) {
                 //int n = c.getAddedSize();
                 ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)c.getList();
-                addressBar.setText(listEntry.get(listEntry.size()-1).getUrl());
+                String url = listEntry.get(listEntry.size()-1).getUrl();
+                addressBar.setText(url);
                 contextMenu.hide();
                 int a = 2;
+
+
+
+
+                //
+                //Kiểm tra url có trong bảng CSDL BOOKMARK không
+                //Nếu có thì set image background của bookMarkButton màu hồng
+                //Nếu không có thì set image background của bookMarkButton màu trắng
+                //
+
+
+
+
+            }
+        });
+        //endregion
+
+        //region bookMarkButton
+        //Setting up bookmark button
+        bookMarkPopup = new JFXPopup();
+
+        JFXButton closeButton = new JFXButton("X");
+        closeButton.setStyle("-fx-font: 15 arial;");
+        closeButton.setPrefSize(20,20);
+        HBox closeHBox = new HBox();
+        closeHBox.getChildren().add(closeButton);
+        closeHBox.setMargin(closeButton, new Insets(5, 0, 0, 300));
+
+        Label titleLabel = new Label("Đã thêm dấu trang");
+        titleLabel.setStyle("-fx-font: 20 arial;");
+        HBox titleHBox = new HBox();
+        titleHBox.getChildren().add(titleLabel);
+        titleHBox.setMargin(titleLabel, new Insets(0, 0, 0, 10));
+
+        Label nameLabel = new Label("Tên");
+        nameLabel.setStyle("-fx-font: 15 arial;");
+        nameTextField = new TextField();
+        nameTextField.setPrefSize(250, 30);
+        HBox nameHBox = new HBox();
+        nameHBox.getChildren().addAll(nameLabel, nameTextField);
+        nameHBox.setMargin(nameLabel, new Insets(25, 0, 0, 10));
+        nameHBox.setMargin(nameTextField, new Insets(20, 10, 0, 30));
+
+        JFXButton completeButton = new JFXButton("Hoàn tất");
+        completeButton.setStyle("-fx-font: 14 arial; -fx-background-color: #ed577f; -fx-text-fill: #ffffff");
+        completeButton.setPrefSize(80, 30);
+        JFXButton deleteButton = new JFXButton("Xóa");
+        deleteButton.setStyle("-fx-font: 14 arial; -fx-border-color: #d6cfd1; -fx-border-width: 1px;");
+        deleteButton.setPrefSize(80, 30);
+
+        HBox buttonHBox = new HBox();
+        buttonHBox.getChildren().addAll(completeButton, deleteButton);
+        buttonHBox.setMargin(completeButton, new Insets(20, 0, 20, 140));
+        buttonHBox.setMargin(deleteButton, new Insets(20, 10, 20, 10));
+
+        VBox bookMarkVBox = new VBox();
+        bookMarkVBox.getChildren().addAll(closeHBox, titleHBox, nameHBox, buttonHBox);
+        bookMarkPopup.setPopupContent(bookMarkVBox);
+
+
+        //
+        //Sự kiện của completeButton
+        //Sửa tên bookmark thành text trong nameTextField trong CSDL theo url
+        //
+
+
+
+        //
+        //Sự kiện của deleteButton
+        //Xóa url của textfield trong CSDL
+        //Đổi màu bookMarkButton thành màu trắng
+        //
+
+
+
+        closeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                bookMarkPopup.hide();
+            }
+        });
+
+        bookMarkButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                bookMarkPopup.show(bookMarkButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, event.getX() - 20, event.getY() + 20);
+
+                Image image = (new Image("../resources/Drawable/icons8-bookmark-25.png"));
+                ImageView imageView = new ImageView(image);
+                bookMarkButton.setGraphic(imageView);
+
+                String title = nameTextField.getText();
+                String url = addressBar.getText();
+
+
+                //
+                //
+                //SAI RỒI NHA THẢO
+                //
+                //
+
+
+                //nameTextField.setText(webEngine.getTitle());
+                PreparedStatement preparedStatement = null;
+                try {
+//                    Statement statement = SqliteDatabaseBookmarks.getInstance().getConnection().createStatement();
+//                    preparedStatement = SQLiteDatabase.getInstance().getConnection().prepareStatement("SELECT * FROM 'bookmarks' WHERE 'url'=?");
+//                    preparedStatement.setString(1, url);
+//                    ResultSet resultSet = preparedStatement.executeQuery();
+//                    if (resultSet.next()){
+//                        //Nếu có thì select tên bookmark từ CSDL lên theo url
+//                        nameTextField.setText(resultSet.getString("title"));
+//                    }
+//                    else {
+                    {
+                        //add new bookmark to DB
+                        SqliteDatabaseBookmarks.getInstance().ConnectToDatabase();
+                        preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("INSERT INTO 'bookmarks' values (?,?)");
+                        preparedStatement.setString(1, title);
+                        preparedStatement.setString(2, url);
+                        preparedStatement.executeUpdate();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
         //endregion
@@ -183,8 +330,8 @@ public class TabContentController implements Initializable, IReferencable{
                         int a = 2;
                         //endregion
 
-                        //region add to DB
-                        PreparedStatement preparedStatement = SQLiteDatabase.getInstance().getConnection().prepareStatement("INSERT INTO "+ SQLiteDatabase.getInstance().getTableName() +" values (?,?,?,?,?)");
+                        //region add new bookmark to DB
+                        PreparedStatement preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("INSERT INTO "+ SQLiteDatabase.getInstance().getTableName() +" values (?,?,?,?,?)");
                         preparedStatement.setString(1, url);
                         preparedStatement.setString(2, date);
                         preparedStatement.setString(3, time);
@@ -192,6 +339,9 @@ public class TabContentController implements Initializable, IReferencable{
                         preparedStatement.setString(5, domain);
                         preparedStatement.executeUpdate();
                         //endregion
+
+
+
                     }
                     catch (Exception e){
                         System.out.println("tab content - worker changed");
@@ -337,7 +487,7 @@ public class TabContentController implements Initializable, IReferencable{
         taskButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                popup.show(taskButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, event.getX(), event.getY());
+                popup.show(taskButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, event.getX() - 20, event.getY());
             }
         });
 
@@ -345,6 +495,7 @@ public class TabContentController implements Initializable, IReferencable{
         toPDFButton.setOnMouseClicked(event -> convertToPDF());
         printButton.setOnMouseClicked(event -> printWebPage());
         historyButton.setOnMouseClicked(e->addHistoryTab());
+        bookmarkButton.setOnMouseClicked(e->addBookmarksTab());
         infoButton.setOnMouseClicked(e->addInfoTab());
         //endregion
 
@@ -370,7 +521,6 @@ public class TabContentController implements Initializable, IReferencable{
             }
         });
         //endregion
-
 
         webEngine.locationProperty().addListener(new ChangeListener<String>() {
 
@@ -402,15 +552,24 @@ public class TabContentController implements Initializable, IReferencable{
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
-
-
-
                 }
-
             }
         });
+
+
+        //
+        //Thêm, xóa list button
+        Button test = new Button("test");
+        bookmarkTabsHBox.getChildren().addAll(test, new Button("1"));
+        test.setOnAction(e->{
+            bookmarkTabsHBox.getChildren().add(new Button("test"));
+        });
+        bookmarkTabsHBox.getChildren().removeIf(e->{
+            if(((Button) e).getText() == "1")
+                return true;
+            return false;
+        });
+        //
 
 
     }
@@ -524,7 +683,13 @@ public class TabContentController implements Initializable, IReferencable{
 
     private void addHistoryTab(){
         TabPaneController tabPaneController = (TabPaneController)ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
-        tabPaneController.addNewTab(true);
+        tabPaneController.addNewTab(1);
+        popup.hide();
+    }
+
+    private void addBookmarksTab(){
+        TabPaneController tabPaneController = (TabPaneController)ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
+        tabPaneController.addNewTab(2);
         popup.hide();
     }
 

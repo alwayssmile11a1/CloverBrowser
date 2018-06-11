@@ -1,6 +1,7 @@
 package Application;
 
 import Model.SqliteDatabase.SQLiteDatabase;
+import Model.SqliteDatabase.SqliteDatabaseBookmarks;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,7 @@ public class Main extends Application {
 
     private static Stage currentStage;
     public static SQLiteDatabase webHistoryDB;
+    public static SqliteDatabaseBookmarks bookmarksDB;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -25,6 +27,8 @@ public class Main extends Application {
         }*/
         webHistoryDB = new SQLiteDatabase();
         webHistoryDB.ConnectToDatabase();
+        bookmarksDB = new SqliteDatabaseBookmarks();
+        bookmarksDB.ConnectToDatabase();
         //boolean TableExists = webHistoryDB.CreateTableIfUnexists();
         //endregion
         Parent root = FXMLLoader.load(getClass().getResource("/View/tabpane.fxml"));
