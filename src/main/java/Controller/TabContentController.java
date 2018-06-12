@@ -18,6 +18,8 @@ import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -55,8 +57,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -124,8 +130,10 @@ public class TabContentController implements Initializable, IReferencable{
     private ContextMenu tabContextMenu;
     //endregion
     TextField nameTextField;
+    private boolean urlChange = false;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         if (!ReferencableManager.getInstance().contain(this)) {
             ReferencableManager.getInstance().add(this);
         }
@@ -150,8 +158,10 @@ public class TabContentController implements Initializable, IReferencable{
                 //int n = c.getAddedSize();
                 ObservableList<WebHistory.Entry> listEntry = (ObservableList<WebHistory.Entry>)c.getList();
                 String url = listEntry.get(listEntry.size()-1).getUrl();
+                urlChange = true;
                 addressBar.setText(url);
                 contextMenu.hide();
+                String title = webEngine.getTitle();
                 int a = 2;
 
 
@@ -306,6 +316,24 @@ public class TabContentController implements Initializable, IReferencable{
                     TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
                     tabPaneController.setFavicon(favIconFullURL);
                     //endregion
+                }
+
+            }
+        });
+        worker.workDoneProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                String message = worker.getMessage();
+                State s2 = worker.getState();
+                double s3 = worker.getProgress();
+                Object s4 = worker.getValue();
+                double s5 = worker.getTotalWork();
+                String s6 = worker.getTitle();
+                boolean s7 = worker.isRunning();
+                double s8 = worker.getWorkDone();
+                int a = 2;
+                if(message.equals("Loading complete") && urlChange){
+                    urlChange = false;
                     //region store history
                     System.out.println("Finish!");
                     try {
@@ -316,7 +344,11 @@ public class TabContentController implements Initializable, IReferencable{
                         int i = webHistory.getEntries().size() - 1;
                         WebHistory.Entry entry = webHistory.getEntries().get(i);
                         String url = entry.getUrl();
-                        String[] temp = entry.getLastVisitedDate().toString().split(" ");
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date d = new Date();
+                        String datetime = d.toString();
+
+                        String[] temp = datetime.split(" ");
                         String date = temp[5] + "-" + MonthToNum.changeMonthToNum(temp[1]) + "-" + temp[2];
                         String time = temp[3];
                         String domain = url.split("/")[2].substring(4);
@@ -329,7 +361,6 @@ public class TabContentController implements Initializable, IReferencable{
                         bufferedWriter.close();
                         fileWriter.close();
                         //endregion
-                        int a = 2;
                         //endregion
 
                         //region add history to DB
@@ -350,13 +381,13 @@ public class TabContentController implements Initializable, IReferencable{
                     catch (Exception e){
                         System.out.println("tab content - worker changed");
                         System.err.println(e.getMessage());
+                        e.printStackTrace();
                     }
                     finally {
                         SQLiteDatabase.getInstance().Disconnect();
                     }
                     //endregion
                 }
-
             }
         });
         //endregion
@@ -574,8 +605,6 @@ public class TabContentController implements Initializable, IReferencable{
             return false;
         });
         //
-
-
     }
 
     private void addImageToPopup(HBox h, String url){
