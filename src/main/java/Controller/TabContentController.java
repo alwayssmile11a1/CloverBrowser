@@ -244,8 +244,10 @@ public class TabContentController implements Initializable, IReferencable{
                 ImageView imageView = new ImageView(image);
                 bookMarkButton.setGraphic(imageView);
 
-                String title = nameTextField.getText();
                 String url = addressBar.getText();
+                //String title = url.split("\\.")[1];
+                String title = webEngine.getTitle();
+//                nameTextField.setText(title);
 
 
                 //
@@ -258,22 +260,22 @@ public class TabContentController implements Initializable, IReferencable{
                 //nameTextField.setText(webEngine.getTitle());
                 PreparedStatement preparedStatement = null;
                 try {
-//                    Statement statement = SqliteDatabaseBookmarks.getInstance().getConnection().createStatement();
-//                    preparedStatement = SQLiteDatabase.getInstance().getConnection().prepareStatement("SELECT * FROM 'bookmarks' WHERE 'url'=?");
-//                    preparedStatement.setString(1, url);
-//                    ResultSet resultSet = preparedStatement.executeQuery();
-//                    if (resultSet.next()){
-//                        //Nếu có thì select tên bookmark từ CSDL lên theo url
-//                        nameTextField.setText(resultSet.getString("title"));
-//                    }
-//                    else {
-                    {
+                    Statement statement = SqliteDatabaseBookmarks.getInstance().getConnection().createStatement();
+                    preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks WHERE url=?");
+                    preparedStatement.setString(1, url);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()){
+                        //Nếu có thì select tên bookmark từ CSDL lên theo url
+                        nameTextField.setText(resultSet.getString("title"));
+                    }
+                    else {
                         //add new bookmark to DB
-                        SqliteDatabaseBookmarks.getInstance().ConnectToDatabase();
+//                        SqliteDatabaseBookmarks.getInstance().ConnectToDatabase();
                         preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("INSERT INTO 'bookmarks' values (?,?)");
                         preparedStatement.setString(1, title);
                         preparedStatement.setString(2, url);
                         preparedStatement.executeUpdate();
+                        nameTextField.setText(title);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -330,14 +332,16 @@ public class TabContentController implements Initializable, IReferencable{
                         int a = 2;
                         //endregion
 
-                        //region add new bookmark to DB
-                        PreparedStatement preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("INSERT INTO "+ SQLiteDatabase.getInstance().getTableName() +" values (?,?,?,?,?)");
+                        //region add history to DB
+                        //region add to DB
+                        PreparedStatement preparedStatement = SQLiteDatabase.getInstance().getConnection().prepareStatement("INSERT INTO "+ SQLiteDatabase.getInstance().getTableName() +" values (?,?,?,?,?)");
                         preparedStatement.setString(1, url);
                         preparedStatement.setString(2, date);
                         preparedStatement.setString(3, time);
                         preparedStatement.setString(4, title);
                         preparedStatement.setString(5, domain);
                         preparedStatement.executeUpdate();
+                        //endregion
                         //endregion
 
 
