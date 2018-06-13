@@ -18,8 +18,9 @@
             <children>
                 <Label style="-fx-text-fill: #FFFF8D; -fx-font-size: 20" text="History" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="17" />
                 <HBox alignment="CENTER" prefHeight="60.0" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-                    <JFXTextField promptText="Search history" style="-fx-text-fill: #FFFF8D; -fx-font-size: 20; -fx-prompt-text-fill: #FFFF8D; -jfx-focus-color: #FFFF8D" />
+                    <JFXTextField fx:id="txbSearch" promptText="Search history" style="-fx-text-fill: #FFFF8D; -fx-font-size: 20; -fx-prompt-text-fill: #FFFF8D; -jfx-focus-color: #FFFF8D" />
                 </HBox>
+                <JFXButton fx:id="btnRefresh" mnemonicParsing="false" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Refresh" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="15.0" />
             </children>
         </AnchorPane>
         <GridPane fx:id="actionBar" layoutY="-60.0" prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -41,7 +42,7 @@
             </JFXButton>
             <JFXButton fx:id="gotoWebsiteButton" alignment="CENTER" buttonType="RAISED" prefWidth="100" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Go" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                 <GridPane.margin>
-                    <Insets top="12"/>
+                    <Insets top="12" />
                 </GridPane.margin>
             </JFXButton>
             <Label fx:id="lblNumberSelectedItems" style="-fx-text-fill: white" text="0 selected" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -52,6 +53,7 @@
                <Font size="16.0" />
             </font></Label>
          <rowConstraints>
+            <RowConstraints />
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
