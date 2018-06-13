@@ -9,63 +9,63 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="721.0" prefWidth="1693.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CloverInfoController">
+<AnchorPane style="-fx-background-color: #fabcd2" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CloverInfoController">
    <children>
-       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="225.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="900.0" AnchorPane.topAnchor="200.0">
+       <ImageView style="-fx-border-color: transparent" fitHeight="500.0" fitWidth="900.0" layoutX="225.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="30">
            <image>
-               <Image url="@../Drawable/three_leaf_clover.png" />
+               <Image url="@../Drawable/AboutUs.png" />
            </image>
        </ImageView>
-      <Label layoutX="858.0" layoutY="373.0" text="Clover Team" AnchorPane.topAnchor="375.0">
-         <font>
-            <Font name="System Bold" size="40.0" />
-         </font>
-         <textFill>
-            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.1717557251908397">
-               <stops>
-                  <Stop color="#00863e" />
-                  <Stop color="#c5ddd1" offset="1.0" />
-               </stops>
-            </LinearGradient>
-         </textFill>
-      </Label>
-      <Label layoutX="767.0" layoutY="423.0" text="Nguyễn Đức Thông - 15520856" AnchorPane.topAnchor="475.0">
-         <font>
-            <Font size="30.0" />
-         </font>
-         <textFill>
-            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.18702292305822588">
-               <stops>
-                  <Stop color="#00863e" />
-                  <Stop color="#c5ddd1" offset="1.0" />
-               </stops>
-            </LinearGradient>
-         </textFill></Label>
-      <Label layoutX="778.0" layoutY="525.0" text="Trương Ngọc Sơn - 15520740" AnchorPane.topAnchor="575.0">
-         <font>
-            <Font size="30.0" />
-         </font>
-         <textFill>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="#00863e" />
-                  <Stop color="#c5ddd1" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </textFill>
-      </Label>
-      <Label layoutX="761.0" layoutY="637.0" prefHeight="84.0" prefWidth="430.0" text="Trần Thị Thanh Thảo - 15520820" AnchorPane.topAnchor="637.0">
-         <font>
-            <Font size="30.0" />
-         </font>
-         <textFill>
-            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.12380952380952376">
-               <stops>
-                  <Stop color="#3b8343" />
-                  <Stop color="#b0ffd7" offset="1.0" />
-               </stops>
-            </LinearGradient>
-         </textFill>
-      </Label>
+      <!--<Label layoutX="858.0" layoutY="373.0" text="Clover Team" AnchorPane.topAnchor="80.0">-->
+         <!--<font>-->
+            <!--<Font name="System Bold" size="40.0" />-->
+         <!--</font>-->
+         <!--<textFill>-->
+            <!--<LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.1717557251908397">-->
+               <!--<stops>-->
+                  <!--<Stop color="#00863e" />-->
+                  <!--<Stop color="#c5ddd1" offset="1.0" />-->
+               <!--</stops>-->
+            <!--</LinearGradient>-->
+         <!--</textFill>-->
+      <!--</Label>-->
+      <!--<Label layoutX="767.0" layoutY="423.0" text="Nguyễn Đức Thông - 15520856" AnchorPane.topAnchor="110.0">-->
+         <!--<font>-->
+            <!--<Font size="30.0" />-->
+         <!--</font>-->
+         <!--<textFill>-->
+            <!--<LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.18702292305822588">-->
+               <!--<stops>-->
+                  <!--<Stop color="#00863e" />-->
+                  <!--<Stop color="#c5ddd1" offset="1.0" />-->
+               <!--</stops>-->
+            <!--</LinearGradient>-->
+         <!--</textFill></Label>-->
+      <!--<Label layoutX="778.0" layoutY="525.0" text="Trương Ngọc Sơn - 15520740" AnchorPane.topAnchor="140.0">-->
+         <!--<font>-->
+            <!--<Font size="30.0" />-->
+         <!--</font>-->
+         <!--<textFill>-->
+            <!--<RadialGradient centerX="0.5" centerY="0.5" radius="0.5">-->
+               <!--<stops>-->
+                  <!--<Stop color="#00863e" />-->
+                  <!--<Stop color="#c5ddd1" offset="1.0" />-->
+               <!--</stops>-->
+            <!--</RadialGradient>-->
+         <!--</textFill>-->
+      <!--</Label>-->
+      <!--<Label layoutX="761.0" layoutY="637.0" prefHeight="84.0" prefWidth="430.0" text="Trần Thị Thanh Thảo - 15520820" AnchorPane.topAnchor="160.0">-->
+         <!--<font>-->
+            <!--<Font size="30.0" />-->
+         <!--</font>-->
+         <!--<textFill>-->
+            <!--<LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.12380952380952376">-->
+               <!--<stops>-->
+                  <!--<Stop color="#3b8343" />-->
+                  <!--<Stop color="#b0ffd7" offset="1.0" />-->
+               <!--</stops>-->
+            <!--</LinearGradient>-->
+         <!--</textFill>-->
+      <!--</Label>-->
    </children>
 </AnchorPane>

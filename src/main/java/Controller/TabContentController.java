@@ -127,16 +127,25 @@ public class TabContentController implements Initializable, IReferencable{
     public static String link="google.com";
 
     private ContextMenu webViewContextMenu;
+
     private ContextMenu tabContextMenu;
     //endregion
-    TextField nameTextField;
+
+    private TextField nameTextField;
+
     private boolean urlChange = false;
+
+    private String titleBookmark = "";
+
+    private String oldTitle = "";
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         if (!ReferencableManager.getInstance().contain(this)) {
             ReferencableManager.getInstance().add(this);
         }
+
         webView.setContextMenuEnabled(false);
         webView.setOnMouseClicked(e->{
             boolean isrightMouse = e.isSecondaryButtonDown();
@@ -164,24 +173,61 @@ public class TabContentController implements Initializable, IReferencable{
                 String title = webEngine.getTitle();
                 int a = 2;
 
-
-
-
                 //
                 //Kiểm tra url có trong bảng CSDL BOOKMARK không
                 //Nếu có thì set image background của bookMarkButton màu hồng
                 //Nếu không có thì set image background của bookMarkButton màu trắng
                 //
-
-
-
-
+                PreparedStatement preparedStatement = null;
+                try {
+                    preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks WHERE url=?");
+                    preparedStatement.setString(1, url);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()){
+                        ChangeBookmarkImage(true);
+                    }
+                    else {
+                        ChangeBookmarkImage(false);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
         //endregion
 
-        //region bookMarkButton
-        //Setting up bookmark button
+        //region Thiết lập các tab bookmark trên tab content
+        String title;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                //Nếu có thì select tên bookmark từ CSDL lên theo url
+                title = resultSet.getString("title");
+
+                AddBookmarkButtonInTab(title);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        //endregion
+
+        //region bookMarkButton - Thiết lập các thành phần, sự kiện của thành phần
         bookMarkPopup = new JFXPopup();
 
         JFXButton closeButton = new JFXButton("X");
@@ -225,17 +271,86 @@ public class TabContentController implements Initializable, IReferencable{
 
         //
         //Sự kiện của completeButton
-        //Sửa tên bookmark thành text trong nameTextField trong CSDL theo url
+        //Sửa tên bookmark thành text của nameTextField trong CSDL theo url
         //
+        completeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String url = addressBar.getText();
+                String newTitle = nameTextField.getText();
 
+                PreparedStatement preparedStatement = null;
+                try {
+                    preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks WHERE url=?");
+                    preparedStatement.setString(1, url);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        oldTitle = resultSet.getString("title");
+                    }
 
+                    preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("UPDATE bookmarks SET title = ? WHERE url = ?");
+                    preparedStatement.setString(1, newTitle);
+                    preparedStatement.setString(2, url);
+                    preparedStatement.executeUpdate();
+
+                    bookmarkTabsHBox.getChildren().forEach(e->{
+                        if(((Button) e).getText().equals(oldTitle)){
+                            ((Button) e).setText(newTitle);
+                        }
+                    });
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                bookMarkPopup.hide();
+            }
+        });
 
         //
         //Sự kiện của deleteButton
         //Xóa url của textfield trong CSDL
         //Đổi màu bookMarkButton thành màu trắng
         //
+        deleteButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String url = addressBar.getText();
 
+                PreparedStatement preparedStatement = null;
+                try {
+                    preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks WHERE url=?");
+                    preparedStatement.setString(1, url);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        titleBookmark = resultSet.getString("title");
+                    }
+
+                    //Xóa bookmark theo url trong CSDL
+                    preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("DELETE FROM bookmarks WHERE url=?");
+                    preparedStatement.setString(1, url);
+                    preparedStatement.executeUpdate();
+
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                } finally {
+                    SqliteDatabaseBookmarks.getInstance().Disconnect();
+                }
+
+                ChangeBookmarkImage(false);
+
+                DeleteBookmarkButtonInTab(titleBookmark);
+
+                bookMarkPopup.hide();
+            }
+        });
 
 
         closeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -250,42 +365,31 @@ public class TabContentController implements Initializable, IReferencable{
             public void handle(MouseEvent event) {
                 bookMarkPopup.show(bookMarkButton, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT, event.getX() - 20, event.getY() + 20);
 
-                Image image = (new Image("../resources/Drawable/icons8-bookmark-25.png"));
-                ImageView imageView = new ImageView(image);
-                bookMarkButton.setGraphic(imageView);
+                ChangeBookmarkImage(true);
 
                 String url = addressBar.getText();
-                //String title = url.split("\\.")[1];
                 String title = webEngine.getTitle();
-//                nameTextField.setText(title);
 
-
-                //
-                //
-                //SAI RỒI NHA THẢO
-                //
-                //
-
-
-                //nameTextField.setText(webEngine.getTitle());
                 PreparedStatement preparedStatement = null;
                 try {
-                    Statement statement = SqliteDatabaseBookmarks.getInstance().getConnection().createStatement();
                     preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks WHERE url=?");
                     preparedStatement.setString(1, url);
                     ResultSet resultSet = preparedStatement.executeQuery();
                     if (resultSet.next()){
-                        //Nếu có thì select tên bookmark từ CSDL lên theo url
+                        //Nếu có
+                        //Select tên bookmark từ CSDL lên theo url
                         nameTextField.setText(resultSet.getString("title"));
                     }
                     else {
-                        //add new bookmark to DB
-//                        SqliteDatabaseBookmarks.getInstance().ConnectToDatabase();
+                        //Ngược lại
+                        //Thêm bookmark mới vào CSDL
                         preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("INSERT INTO 'bookmarks' values (?,?)");
                         preparedStatement.setString(1, title);
                         preparedStatement.setString(2, url);
                         preparedStatement.executeUpdate();
                         nameTextField.setText(title);
+
+                        AddBookmarkButtonInTab(title);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -590,21 +694,6 @@ public class TabContentController implements Initializable, IReferencable{
                 }
             }
         });
-
-
-        //
-        //Thêm, xóa list button
-        Button test = new Button("test");
-        bookmarkTabsHBox.getChildren().addAll(test, new Button("1"));
-        test.setOnAction(e->{
-            bookmarkTabsHBox.getChildren().add(new Button("test"));
-        });
-        bookmarkTabsHBox.getChildren().removeIf(e->{
-            if(((Button) e).getText() == "1")
-                return true;
-            return false;
-        });
-        //
     }
 
     private void addImageToPopup(HBox h, String url){
@@ -760,6 +849,73 @@ public class TabContentController implements Initializable, IReferencable{
             LoadWithContextMenu(item.getText().split("-")[0]);
         }));
 
+    }
+
+    private void AddBookmarkButtonInTab(String buttonText){
+        Button insertBookmark = new Button();
+        insertBookmark.setText(buttonText);
+        insertBookmark.setPrefWidth(100);
+        insertBookmark.setStyle("-fx-background-color: #ffd3e4");
+        bookmarkTabsHBox.getChildren().add(insertBookmark);
+
+        //
+        //Tạo sự kiện khi click chuột thì
+        //Tìm trong CSDL url có title == insertBookmark.getText()
+        //Load lại tab hiện tại theo url tìm được
+        //
+        insertBookmark.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String title = insertBookmark.getText();
+
+                PreparedStatement preparedStatement = null;
+                try {
+                    preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks WHERE title=?");
+                    preparedStatement.setString(1, title);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        //Nếu có thì select tên bookmark từ CSDL lên theo url
+                        String url = resultSet.getString("url");
+
+                        //Load lại tab theo url
+                        webEngine.load(url);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void ChangeBookmarkImage(boolean b){
+        Image image;
+        if (b == true){
+            //Đổi màu hồng
+            image = (new Image("../resources/Drawable/icons8-bookmark-25.png"));
+        }
+        else{
+            //Đổi màu trắng
+            image = (new Image("../resources/Drawable/icons8-bookmark-25 (1).png"));
+        }
+
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+        bookMarkButton.setGraphic(imageView);
+    }
+
+    public void DeleteBookmarkButtonInTab(String buttonText){
+        bookmarkTabsHBox.getChildren().removeIf(e->{
+            if(((Button) e).getText().equals(buttonText))
+                return true;
+            return false;
+        });
     }
 
     @Override

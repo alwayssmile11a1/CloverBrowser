@@ -68,6 +68,8 @@ public class BookmarksController implements Initializable, IReferencable {
     @FXML
     private Button deleteButton;
 
+    private  String title;
+
     JFXTreeTableColumn<BookmarksView, String> titleCol = new JFXTreeTableColumn<BookmarksView, String>("Title");
 
     JFXTreeTableColumn<BookmarksView, String> linkCol = new JFXTreeTableColumn<BookmarksView, String>("Link");
@@ -85,14 +87,14 @@ public class BookmarksController implements Initializable, IReferencable {
         addColumns();
         try {
             Statement statement = SqliteDatabaseBookmarks.getInstance().getConnection().createStatement();
-            root = new RecursiveTreeItem<BookmarksView>(new BookmarksView("", ""), RecursiveTreeObject::getChildren);
-            tbvBookmarks.getRoot().getChildren().add(root);
+//            root = new RecursiveTreeItem<BookmarksView>(new BookmarksView("", ""), RecursiveTreeObject::getChildren);
+//            tbvBookmarks.getRoot().getChildren().add(root);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM 'bookmarks' ");
             while (resultSet.next()) {
                 String title = resultSet.getString("title");
                 String url = resultSet.getString("url");
                 BookmarksView bookmarksView = new BookmarksView(title, url);
-                root.getChildren().add(new TreeItem<>(bookmarksView));
+                tbvBookmarks.getRoot().getChildren().add(new TreeItem<>(bookmarksView));
             }
 
         } catch (SQLException e) {
@@ -114,6 +116,9 @@ public class BookmarksController implements Initializable, IReferencable {
 
         });
 
+
+        titleCol.setPrefWidth(400);
+        linkCol.setPrefWidth(1000);
         tbvBookmarks.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tbvBookmarks.setOnMouseClicked(e -> {
             int numberOfSelectedItems = tbvBookmarks.getSelectionModel().getSelectedItems().size();
@@ -185,38 +190,56 @@ public class BookmarksController implements Initializable, IReferencable {
 
     private void deleteBookmarks() {
         ObservableList<TreeItem<BookmarksView>> bookmarks = tbvBookmarks.getSelectionModel().getSelectedItems();
-        for (TreeItem<BookmarksView> item : bookmarks) {
-            String url = item.getValue().link.getValue();
-            if (url.equals("")) {
-                System.out.println("It's root");
-                continue;
-            }
-            try {
-                //region add to DB
-                PreparedStatement preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("DELETE FROM bookmarks WHERE url=?");
+        PreparedStatement preparedStatement = null;
+        try {
+            for (TreeItem<BookmarksView> item : bookmarks) {
+                String url = item.getValue().link.getValue();
+                if (url.equals("")) {
+                    System.out.println("It's root");
+                    continue;
+                }
+
+                preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("SELECT * FROM bookmarks WHERE url=?");
+                preparedStatement.setString(1, url);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    title = resultSet.getString("title");
+                }
+
+                //region delete from DB
+                preparedStatement = SqliteDatabaseBookmarks.getInstance().getConnection().prepareStatement("DELETE FROM bookmarks WHERE url=?");
                 preparedStatement.setString(1, url);
                 preparedStatement.executeUpdate();
                 //endregion
-                System.out.println("Successfully delete in db");
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-            } finally {
-                SqliteDatabaseBookmarks.getInstance().Disconnect();
+
+                TabContentController tabContentController = (TabContentController) ReferencableManager.getInstance().get(TabContentController.FXMLPATH);
+                tabContentController.ChangeBookmarkImage(false);
+                tabContentController.DeleteBookmarkButtonInTab(title);
             }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            SqliteDatabaseBookmarks.getInstance().Disconnect();
         }
+
         List<TreeItem<BookmarksView>> nodes = tbvBookmarks.getSelectionModel().getSelectedItems();
-        int n = nodes.size();
+        int n = bookmarks.size();
         while(n > 0){
-            TreeItem<BookmarksView> temp = nodes.get(0);
-            TreeItem<BookmarksView> parent = nodes.get(0).getParent();
+            TreeItem<BookmarksView> temp = nodes.get(n - 1);
+            if(temp.getValue().link.getValue().equals("")){
+                n--;
+                continue;
+            }
+            TreeItem<BookmarksView> parent = temp.getParent();
             if (parent != null){
-                parent.getChildren().remove(nodes.get(0));
+                parent.getChildren().remove(temp);
                 n--;
             }
             else {
                 return;
             }
         }
+        tbvBookmarks.getSelectionModel().clearSelection();
     }
 }
 class BookmarksView extends RecursiveTreeObject<BookmarksView>{

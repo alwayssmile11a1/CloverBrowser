@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -12,20 +11,21 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.BookmarksController" prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BookmarksController">
     <children>
-        <AnchorPane prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <AnchorPane prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #ffc1d9" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
             <children>
-                <Label style="-fx-text-fill: #FFFF8D; -fx-font-size: 20" text="History" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="17" />
-                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-                    <JFXTextField promptText="Search bookmarks" style="-fx-text-fill: #FFFF8D; -fx-font-size: 20; -fx-prompt-text-fill: #FFFF8D; -jfx-focus-color: #FFFF8D" />
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
+                    <Label style="-fx-text-fill: black; -fx-font-size: 20" text="BOOKMARKS"/>
                 </HBox>
             </children>
         </AnchorPane>
-        <GridPane fx:id="actionBar" layoutY="-60.0" prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #535A60" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <GridPane fx:id="actionBar" layoutY="-60.0" prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #ffc1d9" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <columnConstraints>
                 <ColumnConstraints prefWidth="200" />
-                <ColumnConstraints prefWidth="600" />
+                <ColumnConstraints prefWidth="200" />
+                <ColumnConstraints prefWidth="200" />
+                <ColumnConstraints prefWidth="200" />
             </columnConstraints>
             <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" prefWidth="100" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Cancle" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                 <GridPane.margin>
@@ -39,22 +39,23 @@
             </JFXButton>
             <JFXButton fx:id="gotoWebsiteButton" alignment="CENTER" buttonType="RAISED" prefWidth="100" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Go" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                 <GridPane.margin>
-                    <Insets top="12"/>
+                    <Insets top="12" />
                 </GridPane.margin>
             </JFXButton>
-            <Label fx:id="lblNumberSelectedItems" style="-fx-text-fill: white" text="0 selected" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label fx:id="lblNumberSelectedItems" style="-fx-text-fill: black" text="0 selected" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                 <GridPane.margin>
                     <Insets top="10.0" />
                 </GridPane.margin>
                 <font>
                     <Font size="16.0" />
-                </font></Label>
+                </font>
+            </Label>
             <rowConstraints>
                 <RowConstraints />
                 <RowConstraints />
             </rowConstraints>
         </GridPane>
-        <AnchorPane layoutY="60.0" prefHeight="340.0" prefWidth="600.0" style="-fx-background-color: #535A60" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="60">
+        <AnchorPane layoutY="60.0" prefHeight="340.0" prefWidth="600.0" style="-fx-background-color: #ffc1d9" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="60">
             <JFXTreeTableView fx:id="tbvBookmarks" prefHeight="326.0" prefWidth="600.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
         </AnchorPane>
     </children>

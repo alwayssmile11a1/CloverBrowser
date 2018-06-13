@@ -14,26 +14,33 @@
         - in scene builder: properties -> Style Class -> choose capsule-button; Style Sheet -> choose file css
 */
 .capsule-button{
-    -fx-border-color: -fx-secondary;
+    -fx-border-color: #ffc1d9;
+    -fx-background-color: #ff72a8;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
+    -fx-text-fill: black;
+    /*-fx-graphic: url('http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/128/Pizza-icon.png');*/
+}
+
+.capsule-button:pressed{
+    -fx-border-color: #ffc1d9;
+    -fx-background-color: #ed006a;
+    -fx-text-fill: white;
+}
+
+.capsule-button:hover{
+    -fx-border-color: #ffc1d9;
+    -fx-background-color: #ed006a;
     -fx-text-fill: white;
     /*-fx-graphic: url('http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/128/Pizza-icon.png');*/
 }
 
-.capsule-button:hover{
-    -fx-border-color: -fx-secondary;
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-main;
-    /*-fx-graphic: url('http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/128/Pizza-icon.png');*/
-}
-
 .jfx-list-cell:selected{
-    -fx-background-color: #3d8c91;
+    -fx-background-color: #ff478d;
 }
 
 .jfx-list-cell:hover{
-    -fx-background-color: #1bd79c;
+    -fx-background-color: #ff72a8;
 }
 
 
@@ -51,30 +58,31 @@
 
 
 .tab{
-    -fx-background-color: -fx-main;
+    -fx-background-color: #ff72a8;
+    -fx-border-color: #ff478d;
     -fx-pref-width: 170;
     -fx-pref-height: 40;
 }
 .tab-label{
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-pref-width: 135;
     -fx-alignment: center-left;
 }
 
 .tab:selected{
-    -fx-border-color: -fx-secondary;
-    -fx-border-width: 4 0 0 0;
+    -fx-border-color: #ed006a;
+    -fx-border-width: 6 0 0 0;
 }
 
 .tab:hover {
-    -fx-background-color: -fx-secondary;
+    -fx-background-color: #ed006a;
 }
 .tab:hover .tab-label{
-     -fx-text-fill: -fx-main;
+     -fx-text-fill: white;
  }
 
 .tab-header-background  {
-    -fx-background-color: -fx-main;
+    -fx-background-color: #ff72a8;
 }
 
 .tab-footer-background  {
@@ -82,12 +90,12 @@
 }
 
 .tab:hover .tab-close-button{
-    -fx-background-color: -fx-main;
+    -fx-background-color: white;
 }
 
 
 .tab .tab-close-button{
-    -fx-background-color: -fx-primarytext;
+    -fx-background-color: black;
     -fx-background-image: url("../Drawable/tab-close-button.png");
 }
 
