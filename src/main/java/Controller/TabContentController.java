@@ -115,7 +115,7 @@ public class TabContentController implements Initializable, IReferencable{
     @FXML
     private HBox bookmarkTabsHBox;
 
-    private String httpHeader = "https://www.";
+    private String httpHeader = "https://";
 
     private JFXPopup popup;
 
@@ -763,16 +763,16 @@ public class TabContentController implements Initializable, IReferencable{
     public void loadPage() {
         addressBar.setFocusTraversable(false);
         String address = addressBar.getText();
-        if(address.contains("www") && !address.contains("http")){
-            webEngine.load("https://" + address);
+        if(!address.contains("http")){
+            webEngine.load(httpHeader + address);
         }
         else {
-            webEngine.load(httpHeader + address);
+            webEngine.load(address);
         }
     }
     private void LoadWithContextMenu(String url){
         addressBar.setFocusTraversable(false);
-        if(url.contains("www") && !url.contains("http")){
+        /*if(url.contains("www") && !url.contains("http")){
             webEngine.load("https://" + url);
         }
         else if(!url.contains("www") && !url.contains("http")){
@@ -782,6 +782,12 @@ public class TabContentController implements Initializable, IReferencable{
             catch (Exception e){
                 webEngine.load(url);
             }
+        }
+        else {
+            webEngine.load(url);
+        }*/
+        if(!url.contains("http")){
+            webEngine.load(httpHeader + url);
         }
         else {
             webEngine.load(url);
