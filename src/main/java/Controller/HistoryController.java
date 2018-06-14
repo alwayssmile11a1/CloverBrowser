@@ -139,7 +139,7 @@ public class HistoryController implements Initializable, IReferencable {
                     }
                 });
 
-        linkCol.setPrefWidth(400);
+        linkCol.setPrefWidth(500);
         linkCol.setCellValueFactory(
                 new Callback<TreeTableColumn.CellDataFeatures<HistoryView, String>, ObservableValue<String>>() {
                     @Override
@@ -163,7 +163,7 @@ public class HistoryController implements Initializable, IReferencable {
                         return param.getValue().getValue().domain;
                     }
                 });
-        titleCol.setPrefWidth(150);
+        titleCol.setPrefWidth(700);
         titleCol.setCellValueFactory(
                 new Callback<TreeTableColumn.CellDataFeatures<HistoryView, String>, ObservableValue<String>>() {
                     @Override

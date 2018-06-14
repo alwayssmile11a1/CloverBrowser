@@ -445,7 +445,8 @@ public class TabContentController implements Initializable, IReferencable{
                         //region add to file history
                         int i = webHistory.getEntries().size() - 1;
                         WebHistory.Entry entry = webHistory.getEntries().get(i);
-                        String url = entry.getUrl();
+                        //String url = entry.getUrl();
+                        String url = webEngine.getLocation();
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Date d = new Date();
                         String datetime = d.toString();
