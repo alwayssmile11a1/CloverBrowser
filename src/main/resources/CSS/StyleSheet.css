@@ -35,6 +35,20 @@
     /*-fx-graphic: url('http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/128/Pizza-icon.png');*/
 }
 
+.bookmark-tab-button{
+    -fx-border-color: #ffc1d9;
+    -fx-background-color: #ffd3e4;
+}
+.bookmark-tab-button:hover{
+    -fx-border-color: #ffc1d9;
+    -fx-background-color: #ff72a8;
+}
+
+.bookmark-tab-button:pressed{
+    -fx-border-color: #ffc1d9;
+    -fx-background-color: #ed006a;
+}
+
 .jfx-list-cell:selected{
     -fx-background-color: #ff478d;
 }

@@ -854,7 +854,9 @@ public class TabContentController implements Initializable, IReferencable{
         Button insertBookmark = new Button();
         insertBookmark.setText(buttonText);
         insertBookmark.setPrefWidth(100);
-        insertBookmark.setStyle("-fx-background-color: #ffd3e4");
+        //insertBookmark.setStyle("-fx-background-color: #ffd3e4");
+        insertBookmark.getStylesheets().add( getClass().getResource("/CSS/StyleSheet.css").toExternalForm());
+        insertBookmark.getStyleClass().add("bookmark-tab-button");
         bookmarkTabsHBox.getChildren().add(insertBookmark);
         bookmarkTabsHBox.setMargin(insertBookmark, new Insets(0, 0, 0, 5));
         //
