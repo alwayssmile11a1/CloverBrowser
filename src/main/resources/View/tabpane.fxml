@@ -13,14 +13,14 @@
       <TabPane fx:id="tabPane" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../CSS/StyleSheet.css" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
          <tabs>
-            <Tab fx:id="addNewTabButton" style="-fx-background-color: #ff72a8" closable="false" styleClass="tab-plus" text="+">
+            <Tab fx:id="addNewTabButton" closable="false" style="-fx-background-color: #ff72a8" styleClass="tab-plus" text="+">
                 <tooltip>
-                  <Tooltip text="Add new tab" style="-fx-background-color: #ff72a8" />
+                  <Tooltip style="-fx-background-color: #ff72a8" text="Add new tab" />
                </tooltip>
             </Tab>
          </tabs>
       </TabPane>
-      <FlowPane fx:id="downloadPane" alignment="BOTTOM_LEFT" layoutX="-1.0" layoutY="617.0" prefHeight="40.0" prefWidth="1000.0" styleClass="tab-footer-background" stylesheets="@../CSS/StyleSheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <FlowPane fx:id="downloadPane" alignment="BOTTOM_LEFT" layoutX="-1.0" layoutY="617.0" prefHeight="40.0" prefWidth="1000.0" styleClass="tab-footer-background" stylesheets="@../CSS/StyleSheet.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <JFXButton fx:id="downloadPaneCloseButton" prefHeight="40.0" prefWidth="26.0" styleClass="tab-footer-background" stylesheets="@../CSS/StyleSheet.css" text="X" textAlignment="CENTER">
                <font>

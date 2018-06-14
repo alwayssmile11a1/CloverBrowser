@@ -667,12 +667,13 @@ public class TabContentController implements Initializable, IReferencable{
         });
         //endregion
 
+
+        //download
         webEngine.locationProperty().addListener(new ChangeListener<String>() {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 System.out.println("location of engine: " + newValue);
-                String test = webEngine.getLocation();
                 //Check can download
                 HttpURLConnection connection = DownloadHelper.isDownloadable(webEngine.getLocation());
                 if(connection!=null)

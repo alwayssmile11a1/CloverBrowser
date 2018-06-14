@@ -55,10 +55,11 @@ public class TabPaneController implements Initializable, IReferencable{
 
         addNewTab();
 
-        //
+
         tabPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                //Xem tab cuối cùng (tab "ảo") như là một button
                 if(tabPane.getSelectionModel().isSelected(tabPane.getTabs().size()-1))
                 {
                     onAddNewTabButtonClicked();
