@@ -32,7 +32,7 @@ public class Main extends Application {
         //boolean TableExists = webHistoryDB.CreateTableIfUnexists();
         //endregion
         Parent root = FXMLLoader.load(getClass().getResource("/View/tabpane.fxml"));
-        primaryStage.setTitle("Web Browser");
+        primaryStage.setTitle("Clover Browser");
         primaryStage.setScene(new Scene(root, 1200, 600));
         primaryStage.getIcons().add(new Image("../resources/Drawable/three_leaf_clover.png"));
         currentStage = primaryStage;

@@ -130,8 +130,6 @@ public class TabContentController implements Initializable, IReferencable{
     private ContextMenu webViewContextMenu;
 
     private ContextMenu tabContextMenu;
-
-    private JSObject history;
     //endregion
 
     private TextField nameTextField;
@@ -147,17 +145,6 @@ public class TabContentController implements Initializable, IReferencable{
         if (!ReferencableManager.getInstance().contain(this)) {
             ReferencableManager.getInstance().add(this);
         }
-
-        webView.setContextMenuEnabled(false);
-        webView.setOnMouseClicked(e->{
-            boolean isrightMouse = e.isSecondaryButtonDown();
-            if (e.getButton() == MouseButton.SECONDARY){
-                webViewContextMenu.show(webView, e.getScreenX(), e.getScreenY());
-                //tabContextMenu.show(webView, e.getScreenX()+400, e.getScreenY());
-            }
-            else if (e.getButton() == MouseButton.PRIMARY)
-                webViewContextMenu.hide();
-        });
 
         //region getEngine + getHistory
         webEngine = webView.getEngine();
@@ -205,8 +192,6 @@ public class TabContentController implements Initializable, IReferencable{
             }
         });
         //endregion
-
-        history = (JSObject)webEngine.executeScript("history");
 
         //region Thiết lập các tab bookmark trên tab content
         String title;
@@ -449,6 +434,8 @@ public class TabContentController implements Initializable, IReferencable{
                 int a = 2;
                 if(message.equals("Loading complete") && urlChange){
                     urlChange = false;
+                    addressBar.setText(webEngine.getLocation());
+                    contextMenu.hide();
                     //region store history
                     System.out.println("Finish!");
                     try {
@@ -649,16 +636,6 @@ public class TabContentController implements Initializable, IReferencable{
         infoButton.setOnMouseClicked(e->addInfoTab());
         //endregion
 
-        webViewContextMenu = new ContextMenu();
-        webViewContextMenu.setStyle("-fx-pref-width: 300;");
-        webViewContextMenu.getItems().addAll(new MenuItem("Back"), new MenuItem("Forward"), new MenuItem(("Reload")));
-
-        tabContextMenu = new ContextMenu();
-        tabContextMenu.setStyle("-fx-pref-width: 300;");
-        tabContextMenu.getItems().addAll(new MenuItem("New tab"), new MenuItem("Reload"), new MenuItem("Duplicate"),
-                                         new MenuItem("Close tab"), new MenuItem("Close other tabs"), new MenuItem("Reopen closed tab"),
-                                         new MenuItem("Bookmark all tabs"));
-
         //region binding web title + change tooltip
         TabPaneController tabPaneController = (TabPaneController) ReferencableManager.getInstance().get(TabPaneController.FXMLPATH);
         if (!tabPaneController.getCurrentTab().getText().equals("+") || !tabPaneController.getCurrentTab().getText().equals("history")){
@@ -671,7 +648,6 @@ public class TabContentController implements Initializable, IReferencable{
             }
         });
         //endregion
-
 
         //download
         webEngine.locationProperty().addListener(new ChangeListener<String>() {
@@ -725,14 +701,14 @@ public class TabContentController implements Initializable, IReferencable{
     private void OnBackButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
             webEngine.executeScript("history.back()");
-
+            urlChange = true;
         });
     }
 
     private void OnForwardButtonClicked(MouseEvent e) {
         Platform.runLater(() -> {
             webEngine.executeScript("history.forward()");
-
+            urlChange = true;
         });
 
 
@@ -879,7 +855,7 @@ public class TabContentController implements Initializable, IReferencable{
         insertBookmark.setPrefWidth(100);
         insertBookmark.setStyle("-fx-background-color: #ffd3e4");
         bookmarkTabsHBox.getChildren().add(insertBookmark);
-
+        bookmarkTabsHBox.setMargin(insertBookmark, new Insets(0, 0, 0, 5));
         //
         //Tạo sự kiện khi click chuột thì
         //Tìm trong CSDL url có title == insertBookmark.getText()
