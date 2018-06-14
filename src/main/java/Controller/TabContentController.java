@@ -426,7 +426,12 @@ public class TabContentController implements Initializable, IReferencable{
                     tabPaneController.setFavicon(favIconFullURL);
                     //endregion
                 }
-
+                else {
+                    if (newValue == State.FAILED) {
+                        String url = getClass().getResource("/View/errorpage.html").toExternalForm();
+                        webEngine.load(url);
+                    }
+                }
             }
         });
         worker.workDoneProperty().addListener(new ChangeListener<Number>() {
