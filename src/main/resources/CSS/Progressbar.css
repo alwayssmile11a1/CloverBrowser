@@ -8,5 +8,5 @@
 /*we can see preview color in right hand side*/
 }
 .progress-bar .bar{
-    -fx-background-color: -fx-secondary;
+    -fx-background-color: #FF72A8;
 }
