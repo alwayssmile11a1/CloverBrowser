@@ -147,3 +147,7 @@
 .context-menu{
     -fx-pref-width: 955;
 }
+
+.tree-table-row-cell:selected {
+    -fx-background-color: #ffc1d9;
+}
