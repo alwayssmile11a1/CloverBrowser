@@ -16,9 +16,9 @@
     <children>
         <AnchorPane prefHeight="60.0" prefWidth="600.0" style="-fx-background-color: #ffc1d9" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
             <children>
-                <Label style="-fx-text-fill: black; -fx-font-size: 20" text="HISTORY" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="17" />
+                <Label style="-fx-text-fill: black; -fx-font-size: 15;" text="HISTORY" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20" />
                 <HBox alignment="CENTER" prefHeight="60.0" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-                    <JFXTextField fx:id="txbSearch" promptText="Search history" style="-fx-text-fill: black; -fx-font-size: 20; -fx-prompt-text-fill: black; -jfx-focus-color: black" />
+                    <JFXTextField fx:id="txbSearch" labelFloat="true" promptText="Search history" stylesheets="@../CSS/StyleSheet.css" />
                 </HBox>
                 <JFXButton fx:id="btnRefresh" mnemonicParsing="false" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="Refresh" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="15.0" />
             </children>

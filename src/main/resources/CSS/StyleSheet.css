@@ -123,9 +123,11 @@
 }
 
 .jfx-text-field{
-    /*-jfx-focus-color: -fx-secondary;
-    !*-jfx-unfocus-color: #fffd8c; doesn't work*!
-    -jfx-unfocus-color: cyan;*/
+    -jfx-unfocus-color: #ff72a8;
+    -jfx-focus-color: #ED006A;
+    -fx-font-size: 15;
+    -fx-prompt-text-fill: black;
+    -fx-text-fill: black;
 }
 
 .context-menu{

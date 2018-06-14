@@ -13,7 +13,7 @@
    <children>
        <AnchorPane prefHeight="75.0" prefWidth="1000.0" style="-fx-background-color: #ffc1d9" stylesheets="@../CSS/StyleSheet.css" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
            <children>
-               <JFXButton fx:id="taskButton" layoutX="952.0" style="-fx-border-color: #ffc1d9; -fx-background-color: #ff72a8" layoutY="10.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
+               <JFXButton fx:id="taskButton" layoutX="952.0" layoutY="10.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
                    <graphic>
                        <ImageView>
                            <image>
@@ -32,7 +32,7 @@
                        </ImageView>
                    </graphic>
                </JFXButton>
-               <JFXButton fx:id="goBackButton" layoutX="4.0" layoutY="10.0" style="-fx-border-color: #ffc1d9; -fx-background-color: #ff72a8" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="3.0">
+               <JFXButton fx:id="goBackButton" layoutX="4.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="11.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="3.0">
                    <graphic>
                        <ImageView>
                      <image>
@@ -40,7 +40,7 @@
                      </image></ImageView>
                    </graphic>
                </JFXButton>
-               <JFXButton fx:id="goForwardButton" layoutX="54.0" layoutY="10.0" style="-fx-border-color: #ffc1d9; -fx-background-color: #ff72a8" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="3">
+               <JFXButton fx:id="goForwardButton" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="3">
                    <graphic>
                        <ImageView>
                      <image>
@@ -48,7 +48,7 @@
                      </image></ImageView>
                    </graphic>
                </JFXButton>
-               <JFXButton fx:id="refreshButton" layoutX="104.0" layoutY="10.0" style="-fx-border-color: #ffc1d9; -fx-background-color: #ff72a8" mnemonicParsing="false" onAction="#loadPage" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="3.0">
+               <JFXButton fx:id="refreshButton" layoutX="104.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="0.0" styleClass="capsule-button" stylesheets="@../CSS/StyleSheet.css" text="" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="3.0">
                    <graphic>
                        <ImageView>
                      <image>
@@ -57,12 +57,12 @@
                   </ImageView>
                    </graphic>
                </JFXButton>
-            <JFXProgressBar fx:id="progressLoad" style="-fx-border-color: #ffc1d9; -fx-fill: #ff478d;" layoutX="170.0" layoutY="35.0" prefWidth="200.0" progress="0.51" stylesheets="@../CSS/Progressbar.css" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="37.0" />
-            <HBox fx:id="bookmarkTabsHBox" layoutX="0.0" layoutY="47.0" prefHeight="24.0" prefWidth="1000.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" />
+            <JFXProgressBar fx:id="progressLoad" layoutX="170.0" layoutY="35.0" prefWidth="200.0" progress="0.51" style="-fx-border-color: #ffc1d9; -fx-fill: #ff478d;" stylesheets="@../CSS/Progressbar.css" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="37.0" />
+            <HBox fx:id="bookmarkTabsHBox" layoutX="0.0" layoutY="43.0" prefHeight="24.0" prefWidth="1000.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" />
            </children>
        </AnchorPane>
        <!--<MyTitleBar prefHeight="50.0" prefWidth="1013.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>-->
         
-       <WebView fx:id="webView" layoutX="144.0" layoutY="75.0" prefHeight="526.0" prefWidth="998.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="75.0" />
+       <WebView fx:id="webView" layoutX="144.0" layoutY="81.0" prefHeight="520.0" prefWidth="998.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="75.0" />
    </children>
 </AnchorPane>

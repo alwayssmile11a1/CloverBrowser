@@ -71,6 +71,7 @@ import javafx.concurrent.Worker.State;
 import javafx.stage.PopupWindow;
 import javafx.stage.WindowEvent;
 import net.sf.image4j.codec.ico.ICODecoder;
+import netscape.javascript.JSObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -129,6 +130,8 @@ public class TabContentController implements Initializable, IReferencable{
     private ContextMenu webViewContextMenu;
 
     private ContextMenu tabContextMenu;
+
+    private JSObject history;
     //endregion
 
     private TextField nameTextField;
@@ -141,7 +144,6 @@ public class TabContentController implements Initializable, IReferencable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         if (!ReferencableManager.getInstance().contain(this)) {
             ReferencableManager.getInstance().add(this);
         }
@@ -171,6 +173,7 @@ public class TabContentController implements Initializable, IReferencable{
                 addressBar.setText(url);
                 contextMenu.hide();
                 String title = webEngine.getTitle();
+                String location = webEngine.getLocation();
                 int a = 2;
 
                 //
@@ -202,6 +205,8 @@ public class TabContentController implements Initializable, IReferencable{
             }
         });
         //endregion
+
+        history = (JSObject)webEngine.executeScript("history");
 
         //region Thiết lập các tab bookmark trên tab content
         String title;
@@ -435,6 +440,7 @@ public class TabContentController implements Initializable, IReferencable{
                 String s6 = worker.getTitle();
                 boolean s7 = worker.isRunning();
                 double s8 = worker.getWorkDone();
+                String location = webEngine.getLocation();
                 int a = 2;
                 if(message.equals("Loading complete") && urlChange){
                     urlChange = false;
@@ -666,7 +672,7 @@ public class TabContentController implements Initializable, IReferencable{
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 System.out.println("location of engine: " + newValue);
-
+                String test = webEngine.getLocation();
                 //Check can download
                 HttpURLConnection connection = DownloadHelper.isDownloadable(webEngine.getLocation());
                 if(connection!=null)
@@ -715,7 +721,6 @@ public class TabContentController implements Initializable, IReferencable{
             webEngine.executeScript("history.back()");
 
         });
-
     }
 
     private void OnForwardButtonClicked(MouseEvent e) {
@@ -770,7 +775,12 @@ public class TabContentController implements Initializable, IReferencable{
             webEngine.load("https://" + url);
         }
         else if(!url.contains("www") && !url.contains("http")){
-            webEngine.load(httpHeader + url);
+            try {
+                webEngine.load(httpHeader + url);
+            }
+            catch (Exception e){
+                webEngine.load(url);
+            }
         }
         else {
             webEngine.load(url);
